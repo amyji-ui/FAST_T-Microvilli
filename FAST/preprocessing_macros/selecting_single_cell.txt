@@ -1,0 +1,30 @@
+// Macro to process all .nd2 files in a folder using Bio-Formats and crop the cells
+
+dir = getDirectory("Choose a Directory");
+list = getFileList(dir);
+
+for (i = 0; i < list.length; i++) {
+    filename = list[i];
+    
+    // Process only .nd2 files
+    if (endsWith(filename, ".nd2")) {
+        // Use Bio-Formats to open the file
+        run("Bio-Formats Importer", "open=[" + dir + filename + "] autoscale stackview");
+
+        // Prompt user to select the region
+        waitForUser("Draw a region of interest (ROI) around the desired cell, then click OK.");
+        
+        run("Make Inverse");
+        run("Invert", "stack");
+        setForegroundColor(0, 0, 0);
+        run("Fill", "stack");
+        run("Select None");
+
+        // Save the result as .tif in the same directory
+        outputPath = dir + replace(filename, ".nd2", ".tif");
+        saveAs("Tiff", outputPath);
+        
+        close();
+    }
+}
+

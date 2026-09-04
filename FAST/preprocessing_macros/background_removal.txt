@@ -1,0 +1,32 @@
+// Open ND2 files from a source directory and remove Background
+// save them in a target directory in PNG format
+// Vineeth Aljapur 2024
+
+source_dir = getDirectory("Source Directory");
+target_dir = getDirectory("Target Directory");
+if (File.exists(source_dir) && File.exists(target_dir)) {
+  setBatchMode(true);
+
+  list = getFileList(source_dir);
+
+  for (i=0; i<list.length; i++) {
+    if (endsWith(list[i], ".nd2")) {
+      path = source_dir + File.separator + list[i];
+      run("Bio-Formats Importer", "open=" + path + " autoscale color_mode=Default rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT");
+
+      imageName = replace(list[i], ".nd2", "");
+      run("Grays");
+
+      run("8-bit");
+      run("Subtract Background...", "rolling=50");
+
+      
+      saveAs("PNG", target_dir + File.separator + imageName + ".png");
+      run("Close All");
+
+      showProgress(i, list.length);
+    }
+  }
+} else {
+  print("Error: Source or target directory does not exist!");
+}

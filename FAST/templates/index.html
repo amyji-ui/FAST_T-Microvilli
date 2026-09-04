@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cytoskeleton Segmentation</title>
+</head>
+<body>
+    <h1>Cytoskeleton Segmentation</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="submit" value="Upload">
+    </form>
+    {% if mask %}
+        <img src="{{ mask }}" alt="Segmentation Mask">
+    {% endif %}
+</body>
+</html>

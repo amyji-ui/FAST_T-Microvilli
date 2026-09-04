@@ -1,0 +1,10 @@
+# Python virtual environment
+python3.11/
+
+# Model weights (download separately — see FAST/inference_demo.ipynb)
+FAST/fast_model.pth
+
+# Python cache / notebook checkpoints
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

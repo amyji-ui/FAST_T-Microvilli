@@ -1,0 +1,640 @@
+// ImageJ Macro to process nd2 files and create corresponding tif files
+// each input nd2 files contains 4 Channels. For example:
+// channel 1: phalliodin
+// channel 2: myosinX
+// channel 3: paxillin channel corresponding focal adhesions
+// channel 4: myosin 2
+
+// Uses the lack of myosin 2 to make masks of lamellar and lamellipodia at the boundary of the cell from phalliodin channel
+// Uses the presence myosin X at the tips of filopodia to make masks of filopodia.
+// For paxillin channel: 1. removes background. 2. makes binary masks with otsu threshold of 200. 3. removes small particles of size < 1 um 4. removes particles with cirularity greater than 0.5
+// for phalliodin channel: removes cytoplasmic background and makes masks based on only actin fibers
+
+// output mask values: 0=background, 1=actin, 2=focal adhesions, 3=lamellipodia, 4=filopodia
+function maskToValue(maskTitle, value) {
+    tempTitle = maskTitle + "_val";
+    selectImage(maskTitle);
+    run("Duplicate...", "title=" + tempTitle);
+    selectImage(tempTitle);
+    run("32-bit");
+    run("Divide...", "value=255");
+    run("Multiply...", "value=" + value);
+    return tempTitle;
+}
+
+mainDir = getDirectory("Choose a Directory");
+target_dir = getDirectory("Target Directory");
+target_dir2 = getDirectory("Target Overlays");
+
+fileList = getFileList(mainDir);
+
+setBatchMode(true);
+for (i = 0; i < fileList.length; i++) {
+    filePath = mainDir + fileList[i];
+    if (!endsWith(filePath, ".nd2")) continue;
+
+    run("Bio-Formats Importer", "open=[" + filePath + "] autoscale color_mode=Default rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT");
+    imageName = replace(fileList[i], ".nd2", "");
+    run("Split Channels");
+    
+    // Set channel order and thresholds based on filename
+    lowerName = toLowerCase(imageName);
+    if (indexOf(lowerName, "hela") != -1) {
+        phalliodin = "C2-" + imageName + ".nd2";
+        myosinX = "C1-" + imageName + ".nd2";
+        paxillin = "C3-" + imageName + ".nd2";
+        myosin2 = "C4-" + imageName + ".nd2";
+        phalloidinThreshold = 150;      // Threshold for phalloidin channel
+        myosin2Threshold = 150;         // Threshold for myosin II channel
+    } else if (indexOf(lowerName, "3t3_data1") != -1) {
+        phalliodin = "C1-" + imageName + ".nd2";
+        myosinX = "C2-" + imageName + ".nd2";
+        paxillin = "C3-" + imageName + ".nd2";
+        myosin2 = "C4-" + imageName + ".nd2";
+        phalloidinThreshold = 200;      // Threshold for phalloidin channel
+        myosin2Threshold = 150;         // Threshold for myosin II channel
+    } else if (indexOf(lowerName, "3t3") != -1) {
+        phalliodin = "C1-" + imageName + ".nd2";
+        myosinX = "C2-" + imageName + ".nd2";
+        paxillin = "C3-" + imageName + ".nd2";
+        myosin2 = "C4-" + imageName + ".nd2";
+        phalloidinThreshold = 200;      // Threshold for phalloidin channel
+        myosin2Threshold = 180;         // Threshold for myosin II channel
+    } else if (indexOf(lowerName, "llcpk1_data3") != -1) {
+        phalliodin = "C2-" + imageName + ".nd2";
+        myosinX = "C1-" + imageName + ".nd2";
+        paxillin = "C3-" + imageName + ".nd2";
+        myosin2 = "C4-" + imageName + ".nd2";
+        phalloidinThreshold = 200;      // Threshold for phalloidin channel
+        myosin2Threshold = 150;         // Threshold for myosin II channel
+    } else if (indexOf(lowerName, "llcpk1_data1") != -1) {
+        phalliodin = "C1-" + imageName + ".nd2";
+        myosinX = "C2-" + imageName + ".nd2";
+        paxillin = "C3-" + imageName + ".nd2";
+        myosin2 = "C4-" + imageName + ".nd2";
+        phalloidinThreshold = 200;      // Threshold for phalloidin channel
+        myosin2Threshold = 200;         // Threshold for myosin II channel
+    } else if (indexOf(lowerName, "llcpk1") != -1) {
+        phalliodin = "C1-" + imageName + ".nd2";
+        myosinX = "C2-" + imageName + ".nd2";
+        paxillin = "C3-" + imageName + ".nd2";
+        myosin2 = "C4-" + imageName + ".nd2";
+        phalloidinThreshold = 200;      // Threshold for phalloidin channel
+        myosin2Threshold = 180;         // Threshold for myosin II channel
+    } else {
+        // Default to hela order and thresholds if not matched
+        phalliodin = "C2-" + imageName + ".nd2";
+        myosinX = "C1-" + imageName + ".nd2";
+        paxillin = "C3-" + imageName + ".nd2";
+        myosin2 = "C4-" + imageName + ".nd2";
+        phalloidinThreshold = 150;
+        myosin2Threshold = 180;
+    }
+
+    // --- Lamellipodia mask detection
+    lamShellThickness = 0;        // Distance (pixels) from the cell edge to retain for lamellipodia
+    lamMedianRadius = 2;           // Median filter radius to smooth the lamellipodia shell (set 0 to disable)
+    morphoOpening = 5; // To avoid filopodia like structures to be detected as lamellipodia as myosin2 is also absent in those structures
+
+    selectImage(phalliodin);
+    run("Duplicate...", "title=phalloidin_outer");
+    setThreshold(phalloidinThreshold, 65535, "raw");
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("Morphological Filters", "operation=Opening element=Disk radius="+morphoOpening);  
+    run("Fill Holes");
+    rename("phalloidin_outer_mask");
+
+    selectImage(myosin2);
+    run("Duplicate...", "title=myosin2_work");
+    setThreshold(myosin2Threshold, 65535, "raw");
+    run("Convert to Mask");
+    run("Fill Holes");
+    rename("myosin2_mask");
+
+    imageCalculator("Subtract create", "phalloidin_outer_mask", "myosin2_mask"); // subtracting myosin2 from phalliodin to get lamellar structures
+    rename("lamellipodia_base_mask");
+    run("Fill Holes");
+    run("Despeckle");
+    run("8-bit");
+
+    selectImage("phalloidin_outer_mask");
+    run("Duplicate...", "title=lamellipodia_distance");
+    run("Distance Map");
+    setThreshold(0, lamShellThickness);
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("8-bit");
+    rename("lamellipodia_shell_mask");
+    if (lamMedianRadius > 0) {
+        run("Median...", "radius=" + lamMedianRadius);
+        setOption("BlackBackground", true);
+        run("Convert to Mask");
+    }
+
+    imageCalculator("AND create", "lamellipodia_shell_mask", "lamellipodia_base_mask");
+    rename("lamellipodia_mask");
+    run("Fill Holes");
+    run("Despeckle");
+    run("8-bit");
+
+    selectImage("lamellipodia_shell_mask");
+    close();
+    selectImage("lamellipodia_base_mask");
+    close();
+    selectImage("myosin2_mask");
+    close();
+
+    // --- Actin mask (channel 1) ---
+    filamentSigmaLow = 0.8;
+    filamentSigmaMid = 1.2;
+    filamentSigmaHigh = 1.8;
+    filamentMinSize = 30;
+    filamentCircularityMax = 0.5;
+    filamentMinLength = 50;        // Minimum filament length (pixels) to retain after skeletonization
+    filamentReconstructionDilate = 1; // Number of dilations to restore filament thickness after skeleton filtering
+
+    selectImage(phalliodin);
+    run("Duplicate...", "title=phalloidin_work");
+    //run("Background Subtractor", "length=40");
+    run("Subtract Background...", "rolling=10 sliding");
+    run("Despeckle");
+    run("Gaussian Blur...", "sigma=1");
+    run("Tubeness", "sigma=" + filamentSigmaLow);
+    rename("tubeness_low");
+
+    selectImage(phalliodin);
+    run("Duplicate...", "title=phalloidin_work2");
+    //run("Background Subtractor", "length=40");
+    run("Subtract Background...", "rolling=10 sliding");
+    run("Despeckle");
+    run("Gaussian Blur...", "sigma=1");
+    run("Tubeness", "sigma=" + filamentSigmaMid);
+    rename("tubeness_mid");
+
+    selectImage(phalliodin);
+    run("Duplicate...", "title=phalloidin_work3");
+    run("Subtract Background...", "rolling=10 sliding");
+    run("Despeckle");
+    run("Gaussian Blur...", "sigma=1");
+    run("Tubeness", "sigma=" + filamentSigmaHigh);
+    rename("tubeness_high");
+
+    imageCalculator("Max create", "tubeness_low", "tubeness_mid");
+    rename("actin_tubeness_partial");
+    imageCalculator("Max create", "actin_tubeness_partial", "tubeness_high");
+    rename("actin_tubeness");
+    selectImage("tubeness_low");
+    close();
+    selectImage("tubeness_mid");
+    close();
+    selectImage("tubeness_high");
+    close();
+    selectImage("actin_tubeness_partial");
+    close();
+
+    setAutoThreshold("Triangle dark");
+    //run("8-bit");
+    //run("Auto Local Threshold", "method=Phansalkar radius=25 parameter_1=0.15 parameter_2=0.5 white");
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    
+    // Remove small bright dots/blobs that are not filamentous using morphological opening
+    run("Morphological Filters", "operation=Opening element=Disk radius=1");
+    run("Remove Outliers...", "radius=2 threshold=50 which=Bright");
+    run("Despeckle");
+
+    particleCmd = "size=" + filamentMinSize + "-Infinity pixel circularity=0.00-" + filamentCircularityMax + " show=Masks exclude clear";
+    run("Analyze Particles...", particleCmd);
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    rename("actin_filament_candidates");
+    run("8-bit");
+    if (isOpen("actin_tubeness")) {
+        selectImage("actin_tubeness");
+        close();
+    }
+
+    // Skeleton-based filtering to suppress blob-like actin structures
+    selectImage("actin_filament_candidates");
+    run("Duplicate...", "title=actin_filament_skeleton");
+    run("Skeletonize (2D/3D)");
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("Analyze Particles...", "size=" + filamentMinLength + "-Infinity pixel show=Masks clear");
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    rename("actin_filament_skeleton_filtered");
+    run("8-bit");
+
+    selectImage("actin_filament_skeleton_filtered");
+    run("Duplicate...", "title=actin_filament_reconstructed");
+    for (d = 0; d < filamentReconstructionDilate; d++) {
+        //run("Morphological Filters", "operation=Dilation element=Disk radius=5");
+        run("Dilate");
+    }
+    imageCalculator("AND create", "actin_filament_reconstructed", "actin_filament_candidates");
+    rename("actin_mask_final");
+    run("8-bit");
+
+    selectImage("actin_filament_reconstructed");
+    close();
+    selectImage("actin_filament_skeleton_filtered");
+    close();
+    selectImage("actin_filament_candidates");
+    close();
+   
+    // --- Focal adhesion mask (channel 3) ---
+    selectImage(paxillin);
+    run("Duplicate...", "title=focal_work");
+    run("Subtract Background...", "rolling=20 sliding");
+    //run("Unsharp Mask...", "radius=1 mask=0.70");
+
+    run("8-bit");
+    run("Auto Local Threshold", "method=Phansalkar radius=18 parameter_1=0 parameter_2=0 white");
+    //setAutoThreshold("Otsu");
+    //getThreshold(lower, upper); 
+    //if (lower < 270) lower = 270;
+    //setThreshold(lower, 65535, "raw");
+    //run("Convert to Mask");
+    //setThreshold(200, 65535, "raw");
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("Despeckle");
+
+    run("Analyze Particles...", "size=50-Infinity pixel show=Masks exclude clear");
+    run("Convert to Mask");
+    rename("focal_adhesions_mask");
+
+    imageCalculator("AND create", "focal_adhesions_mask", "actin_mask_final");
+    rename("focal_adhesions_mask_refined");
+    selectImage("focal_adhesions_mask");
+    close();
+    selectImage("focal_adhesions_mask_refined");
+    rename("focal_adhesions_mask");
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("8-bit");
+
+    // Remove focal adhesions sitting on the phalloidin boundary
+    boundaryMaskTitle = imageName + "_phalloidin_boundary";
+    selectImage("phalloidin_outer_mask");
+    run("Duplicate...", "title=phalloidin_outer_mask_eroded");
+    run("Erode");
+    imageCalculator("Subtract create", "phalloidin_outer_mask", "phalloidin_outer_mask_eroded");
+    rename(boundaryMaskTitle);
+    setOption("BlackBackground", true);
+    run("8-bit");
+    selectImage("phalloidin_outer_mask_eroded");
+    close();
+
+    imageCalculator("Subtract create", "focal_adhesions_mask", boundaryMaskTitle);
+    rename("focal_adhesions_mask_cleaned");
+    selectImage("focal_adhesions_mask");
+    close();
+    selectImage("focal_adhesions_mask_cleaned");
+    setOption("BlackBackground", true);
+    run("8-bit");
+    rename("focal_adhesions_mask");
+    selectImage(boundaryMaskTitle);
+    close();
+    
+    // --- Filopodia mask (channel 1) ---
+    
+    edgeThreshold = 6;
+    edgeOpenIterations = 5;
+    filopodiaThreshold = 15;
+    filopodiaMinSize = 5;
+    finalThreshold = 70;
+    myosinThreshold = 20;
+    myosinDilateIterations = 2;
+    filopodiaDilateIterations = 3;   // Expansion applied to the final filopodia mask
+
+    selectImage(phalliodin);
+    run("Duplicate...", "title=edges_work");
+    run("8-bit");
+    run("Duplicate...", "title=skeleton_work");
+
+    selectImage("edges_work");
+    setThreshold(edgeThreshold, 255);
+    run("Convert to Mask");
+    w = getWidth();
+    h = getHeight();
+    w1 = w + 1;
+    h1 = h + 1;
+    run("Invert");
+    run("Canvas Size...", "width=" + w1 + " height=" + h1 + " position=Top-Left");
+    run("Invert");
+    run("Fill Holes");
+    run("Canvas Size...", "width=" + w + " height=" + h + " position=Top-Left zero");
+    run("Invert");
+    run("Canvas Size...", "width=" + w1 + " height=" + h1 + " position=Bottom-Right");
+    run("Invert");
+    run("Fill Holes");
+    run("Canvas Size...", "width=" + w + " height=" + h + " position=Bottom-Right zero");
+    run("Fill Holes");
+    run("Options...", "iterations=" + edgeOpenIterations + " count=1 black pad do=Open");
+    rename("edge_body");
+
+    selectImage("skeleton_work");
+    run("Convolve...", "text1=[-1 -1 -1 -1 -1\n-1 -1 -1 -1 -1\n-1 -1 24 -1 -1\n-1 -1 -1 -1 -1\n-1 -1 -1 -1 -1\n]");
+    run("Despeckle");
+    run("Despeckle");
+    setThreshold(filopodiaThreshold, 255);
+    run("Convert to Mask");
+    run("Analyze Particles...", "size=8-Infinity pixel circularity=0.00-0.80 show=Masks clear in_situ");
+    filoMaskID = getImageID();
+    selectImage(filoMaskID);
+    rename("skeleton_mask");
+
+    selectImage(myosinX);
+    run("Duplicate...", "title=myosinX_work");
+    run("8-bit");
+    run("Enhance Contrast", "saturated=0.35");
+    run("Gaussian Blur...", "sigma=1");
+    setThreshold(myosinThreshold, 255);
+    run("Convert to Mask");
+    run("Analyze Particles...", "size=5-200 pixel circularity=0.6-1.00 show=Masks clear in_situ");
+    rename("myosinX_dots");
+
+    selectImage("myosinX_dots");
+    run("Duplicate...", "title=myosinX_dilated");
+    for (d = 0; d < myosinDilateIterations; d++) {
+        run("Dilate");
+    }
+    rename("myosinX_dilated");
+    roiManager("reset");
+    run("Select None");
+
+    imageCalculator("Subtract create", "skeleton_mask", "edge_body");
+    rename("filo_candidates");
+    setThreshold(finalThreshold, 255);
+    run("Convert to Mask");
+    roiManager("reset");
+    run("Analyze Particles...", "size=" + filopodiaMinSize + "-Infinity pixel circularity=0.00-0.95 show=Masks add clear in_situ");
+    rename("filo_mask");
+    run("8-bit");
+
+    selectImage("filo_mask");
+    run("8-bit");
+    selectImage("myosinX_dots");
+    run("8-bit");
+    
+    selectImage("filo_mask");
+    width = getWidth();
+    height = getHeight();
+    newImage("filopodia_mask", "8-bit black", width, height, 1);
+
+    selectImage("filo_mask");
+    roiCount = roiManager("count");
+    for (r = 0; r < roiCount; r++) {
+        selectImage("myosinX_dilated");
+        roiManager("Select", r);
+        getStatistics(area, mean, min, max, std);
+        if (mean > 0) {
+            selectImage("filopodia_mask");
+            roiManager("Select", r);
+            setForegroundColor(255,255,255);
+            run("Fill");
+            //run("Fill", "slice");
+        }
+        else {
+            selectImage("actin_mask_final");
+            roiManager("Select", r);
+            setForegroundColor(255,255,255);
+            run("Fill");
+            //run("Fill", "slice");
+        }
+    }
+    
+    roiManager("reset");
+    // Clear any lingering selections so later duplications keep full frame size
+    selectImage("filopodia_mask");
+    run("Select None");
+    selectImage("actin_mask_final");
+    run("Select None");
+    selectImage("filopodia_mask");
+
+    rename("filopodia_mask_core");
+    run("8-bit");
+    selectImage("filopodia_mask_core");
+    run("Duplicate...", "title=filopodia_mask");
+    for (d = 0; d < filopodiaDilateIterations; d++) {
+        run("Morphological Filters", "operation=Dilation element=Disk radius=5");
+    }
+    run("8-bit");
+
+    imageCalculator("AND create", "filopodia_mask", "actin_mask_final");
+    rename("filopodia_mask_constrained");
+    imageCalculator("OR create", "filopodia_mask_constrained", "filopodia_mask_core");
+    rename("filopodia_mask_refined");
+    selectImage("filopodia_mask_constrained");
+    close();
+
+    selectImage("filopodia_mask");
+    close();
+    selectImage("filopodia_mask_refined");
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("8-bit");
+    rename("filopodia_mask");
+
+    // Resolve overlapping masks so higher priority structures stay visible.
+
+    // Remove filopodia overlap from actin mask
+    actinLayer = imageName + "_actin_layer";
+    selectImage("actin_mask_final");
+    run("Duplicate...", "title=" + actinLayer);
+    actinFiloOverlap = imageName + "_actin_filo_overlap";
+    imageCalculator("AND create", actinLayer, "filopodia_mask_core");
+    rename(actinFiloOverlap);
+    imageCalculator("Subtract", actinLayer, actinFiloOverlap);
+    selectImage("actin_mask_final");
+    close();
+    selectImage(actinLayer);
+    rename("actin_mask_final");
+    selectImage(actinFiloOverlap);
+    close();
+
+    // Remove filopodia overlap from lamellipoia mask
+    lamLayer = imageName + "_lamellipodia_layer";
+    selectImage("lamellipodia_mask");
+    run("Duplicate...", "title=" + lamLayer);
+    lamFAOverlap = imageName + "_lam_filo_overlap";
+    imageCalculator("AND create", lamLayer, "filopodia_mask_core");
+    rename(lamFAOverlap);
+    imageCalculator("Subtract", lamLayer, lamFAOverlap);
+    selectImage("lamellipodia_mask");
+    close();
+    selectImage(lamLayer);
+    rename("lamellipodia_mask");
+    selectImage(lamFAOverlap);
+    close();
+    
+    
+    // Remove lamellipodia overlap from actin mask
+    actinLayer = imageName + "_actin_layer";
+    selectImage("actin_mask_final");
+    run("Duplicate...", "title=" + actinLayer);
+    actinLameOverlap = imageName + "_actin_filo_overlap";
+    imageCalculator("AND create", actinLayer, "lamellipodia_mask");
+    rename(actinLameOverlap);
+    imageCalculator("Subtract", actinLayer, actinLameOverlap);
+    selectImage("actin_mask_final");
+    close();
+    selectImage(actinLayer);
+    rename("actin_mask_final");
+    selectImage(actinLameOverlap);
+    close();
+
+    // Remove focal adhesion overlap from actin mask
+    actinLayer = imageName + "_actin_layer";
+    selectImage("actin_mask_final");
+    run("Duplicate...", "title=" + actinLayer);
+    actinFAOverlap = imageName + "_actin_filo_overlap";
+    imageCalculator("AND create", actinLayer, "focal_adhesions_mask");
+    rename(actinFAOverlap);
+    imageCalculator("Subtract", actinLayer, actinFAOverlap);
+    selectImage("actin_mask_final");
+    close();
+    selectImage(actinLayer);
+    rename("actin_mask_final");
+    selectImage(actinFAOverlap);
+    close();
+
+    // Remove focal adhesion overlap from lamellipodia mask
+    lamLayer = imageName + "_lamellipodia_layer";
+    selectImage("lamellipodia_mask");
+    run("Duplicate...", "title=" + lamLayer);
+    lamFAOverlap = imageName + "_lam_filo_overlap";
+    imageCalculator("AND create", lamLayer, "focal_adhesions_mask");
+    rename(lamFAOverlap);
+    imageCalculator("Subtract", lamLayer, lamFAOverlap);
+    selectImage("lamellipodia_mask");
+    close();
+    selectImage(lamLayer);
+    rename("lamellipodia_mask");
+    selectImage(lamFAOverlap);
+    close();
+
+    // Filter out small particles from all masks
+    minMaskSize = 30;
+        maskList = newArray("lamellipodia_mask", "actin_mask_final");
+    if (isOpen("ROI Manager")) {
+        selectWindow("ROI Manager");
+        run("Close");
+    }
+    for (m = 0; m < maskList.length; m++) {
+        mask = maskList[m];
+        if (!isOpen(mask)) continue;
+
+        selectImage(mask);
+        originalMaskID = getImageID();
+        run("Duplicate...", "title=temp_" + mask);
+
+        selectImage(originalMaskID);
+        close();
+
+    selectImage("temp_" + mask);
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+        tempID = getImageID();
+        run("Analyze Particles...", "size=" + minMaskSize + "-Infinity pixel show=Masks clear");
+        filteredID = getImageID();
+
+        if (filteredID != tempID) {
+            selectImage(filteredID);
+            setOption("BlackBackground", true);
+            run("8-bit");
+            rename(mask);
+            selectImage(tempID);
+            close();
+        } else {
+            setOption("BlackBackground", true);
+            run("8-bit");
+            rename(mask);
+        }
+    }
+    
+    // --- Build labeled mask with discrete values ---
+    actinVal = maskToValue("actin_mask_final", 1);
+    focalVal = maskToValue("focal_adhesions_mask", 2);
+    lamVal = maskToValue("lamellipodia_mask", 3);
+    filoVal = maskToValue("filopodia_mask", 4);
+
+    selectImage(actinVal);
+    rename("classification_mask");
+
+    imageCalculator("Max", "classification_mask", focalVal);
+    selectImage(focalVal);
+    close();
+
+    imageCalculator("Max", "classification_mask", lamVal);
+    selectImage(lamVal);
+    close();
+
+    selectImage("filopodia_mask_core");
+    getStatistics(area, mean, min, max, std);
+    if (max > 0){
+        imageCalculator("Max", "classification_mask", filoVal);
+        selectImage(filoVal);
+        close();
+    }
+
+    // --- Build RGB annotation ---
+    selectImage(phalliodin);
+    run("Duplicate...", "title=phalloidin_original");
+    run("Enhance Contrast", "saturated=0.35");
+    run("8-bit");
+
+    selectImage("classification_mask");
+    run("Duplicate...", "title=classification_mask_dup");
+
+    // Use classification_mask_dup to create label1 to label4 masks
+    // label1 -> actin (value 1)
+    selectImage("classification_mask_dup");
+    run("Duplicate...", "title=label1_mask");
+    selectImage("label1_mask");
+    setThreshold(1, 1);
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("8-bit");
+
+    // label2 -> focal adhesions (value 2)
+    selectImage("classification_mask_dup");
+    run("Duplicate...", "title=label2_mask");
+    selectImage("label2_mask");
+    setThreshold(2, 2);
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("8-bit");
+
+    // label3 -> lamellipodia (value 3)
+    selectImage("classification_mask_dup");
+    run("Duplicate...", "title=label3_mask");
+    selectImage("label3_mask");
+    setThreshold(3, 3);
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("8-bit");
+
+    // label4 -> filopodia (value 4)
+    selectImage("classification_mask_dup");
+    run("Duplicate...", "title=label4_mask");
+    selectImage("label4_mask");
+    setThreshold(4, 4);
+    setOption("BlackBackground", true);
+    run("Convert to Mask");
+    run("8-bit");
+
+    resetThreshold();
+
+    run("Merge Channels...", "c1=label2_mask c2=phalloidin_original c3=label4_mask c4=myosinX_dots c6=label1_mask c7=label3_mask keep ignore");
+    saveAs("PNG", target_dir2 + imageName + "_annotations.png");
+
+    selectImage("classification_mask");
+    setOption("BlackBackground", true);
+    run("8-bit");
+    saveAs("PNG", target_dir + imageName + ".png");
+    run("Close All");
+}
