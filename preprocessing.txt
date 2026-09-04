@@ -1,0 +1,132 @@
+// ============================================================
+//  split_wga.ijm
+//  Batch: open images that are 3 CHANNELS x N FRAMES, set channel
+//  colors, split channels, average the repeated frames down to a
+//  single 2-D plane per channel, and save:
+//    - WGA (channel 3): both a red and a grays copy -> output/wga/
+//    - green + yellow (ch 1, 2)                      -> output/other/
+//  Each saved .tif is ONE channel, ONE plane.
+// ============================================================
+
+// -------- hard-coded folders (edit these) --------
+inputDir  = "/Users/jiayiji/Documents/Cai_Lab_Thesis/Images/Test/";
+outputDir = "/Users/jiayiji/Documents/Cai_Lab_Thesis/Images/TestOutput/";
+// -------------------------------------------------
+
+wgaDir   = outputDir + "wga/";     // channel 3 = WGA
+otherDir = outputDir + "other/";   // channels 1 (green) + 2 (yellow)
+
+File.makeDirectory(outputDir);
+File.makeDirectory(wgaDir);
+File.makeDirectory(otherDir);
+
+// Projection used to collapse the repeated frames. "Average Intensity"
+// denoises by averaging (output is 32-bit). Change to "Median" to stay 16-bit.
+projection = "Average Intensity";
+
+list = getFileList(inputDir);
+setBatchMode(true);
+
+for (i = 0; i < list.length; i++) {
+    if (endsWith(list[i], "/")) continue;                 // skip subfolders
+    if (endsWith(toLowerCase(list[i]), ".txt")) continue; // ignore txt files
+
+    fullPath = inputDir + list[i];
+    print("Opening: " + fullPath);
+
+    run("Bio-Formats Importer",
+        "open=[" + fullPath + "] autoscale color_mode=Composite view=Hyperstack stack_order=XYCZT");
+
+    orig = getTitle();
+    base = stripExtension(orig);
+
+    getDimensions(width, height, channels, slices, frames);
+    if (channels < 3) {
+        print("Skipping " + orig + " (fewer than 3 channels)");
+        close();
+        continue;
+    }
+
+    resetMinAndMax();
+    run("Make Composite");
+
+    // split into single channels (still multi-frame at this point)
+    run("Split Channels");
+
+    // ---- WGA = channel 3 -> average frames, save RED and GRAYS into wga/ ----
+    proj = projectChannel("C3-" + orig);
+    if (proj != "") {
+        selectWindow(proj);
+        run("Enhance Contrast", "saturated=0.35");   // display range only (see notes)
+
+        run("Red");
+        saveAs("Tiff", wgaDir + base + "_C3_WGA_red.tif");
+
+        run("Grays");
+        saveAs("Tiff", wgaDir + base + "_C3_WGA_grays.tif");
+
+        close();   // close after BOTH saves
+    }
+
+    // ---- other two channels -> one copy each into other/ ----
+    saveOneVariant("C1-" + orig, "Green",  otherDir + base + "_C1_green.tif");
+    saveOneVariant("C2-" + orig, "Yellow", otherDir + base + "_C2_yellow.tif");
+
+    // safety: close the original if anything is left open
+    if (isOpen(orig)) {
+        selectWindow(orig);
+        close();
+    }
+
+    print("Done: " + orig);
+}
+
+setBatchMode(false);
+print("All done.");
+
+
+// ------------------------------------------------------------
+// Collapse a single-channel multi-frame window to ONE plane.
+// Leaves the projected image OPEN and returns its window title
+// (so the caller can save one or more LUT variants, then close).
+// Returns "" if the window doesn't exist.
+// ------------------------------------------------------------
+function projectChannel(win) {
+    if (!isOpen(win)) return "";
+    selectWindow(win);
+
+    getDimensions(w, h, c, z, t);
+    if (z * t > 1) {
+        // Frames may be tagged as time (t); converting to a plain stack
+        // guarantees Z Project collapses them.
+        run("Hyperstack to Stack");
+        srcStack = getTitle();
+
+        run("Z Project...", "projection=[" + projection + "]");   // creates e.g. "AVG_..."
+        proj = getTitle();
+
+        if (isOpen(srcStack) && srcStack != proj) {               // drop the leftover source stack
+            selectWindow(srcStack);
+            close();
+        }
+        selectWindow(proj);
+        return proj;
+    }
+    return getTitle();   // already a single plane
+}
+
+// Collapse frames, apply one LUT, save once, and close.
+function saveOneVariant(win, lut, outPath) {
+    proj = projectChannel(win);
+    if (proj == "") return;
+    selectWindow(proj);
+    run(lut);
+    saveAs("Tiff", outPath);
+    close();
+}
+
+function stripExtension(name) {
+    dot = lastIndexOf(name, ".");
+    if (dot < 0) return name;
+    return substring(name, 0, dot);
+}

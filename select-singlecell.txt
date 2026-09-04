@@ -1,0 +1,149 @@
+// ============================================================
+//  curate_single_cell_wga.ijm   (interactive single-cell filter)
+//  For each raw image: show the color merge, ask "single cell?".
+//    YES -> save the WGA (channel 3) grayscale 8-bit PNG to output.
+//    NO  -> do nothing, move on.
+//  (Click Cancel on the prompt to stop the batch early.)
+// ============================================================
+
+// -------- hard-coded folders (edit these) --------
+inputDir  = "F:/Cailab/Cai students/Amy/Images/TIRF_HEK_Control/";
+outputDir = "F:/Cailab/Cai students/Amy/Images/TIRF_HEK_Control_Out/";
+// -------------------------------------------------
+
+// Guard against a missing trailing slash (e.g. if the constants above get edited
+// later) -- ImageJ/Java accepts "/" as a path separator fine on Windows, but a
+// missing trailing slash here silently mangles every save/read path below.
+inputDir  = ensureTrailingSlash(inputDir);
+outputDir = ensureTrailingSlash(outputDir);
+
+File.makeDirectory(outputDir);
+
+// Frame collapse: "Average Intensity" denoises. If averaging looks soft (slight
+// frame-to-frame drift), try "Median" (edge-preserving) or "Max Intensity"
+// (keeps thin bright structures crisp).
+projection = "Average Intensity";
+
+// ---- WGA output tuning ----
+bgRadius        = 50;    // rolling-ball background subtraction radius (px)
+contrastSat     = 0.30;  // % pixels saturated each end when stretching contrast (bigger = punchier)
+doSharpen       = true;  // gentle edge sharpening via unsharp mask
+unsharpRadius   = 1.0;   // unsharp-mask radius (px); 1-2 is gentle
+unsharpWeight   = 0.5;   // unsharp-mask strength 0-0.9; keep <=0.6 to avoid halos/noise
+// ---------------------------
+
+list = getFileList(inputDir);
+// interactive: batch mode OFF so you can see each image
+
+for (i = 0; i < list.length; i++) {
+    if (endsWith(list[i], "/")) continue;
+    if (endsWith(toLowerCase(list[i]), ".txt")) continue;
+
+    fullPath = inputDir + list[i];
+
+    run("Bio-Formats Importer",
+        "open=[" + fullPath + "] autoscale color_mode=Composite view=Hyperstack stack_order=XYCZT");
+
+    orig = getTitle();
+    // NOTE: don't derive the save name from getTitle() -- for MetaMorph-style
+    // acquisitions, Bio-Formats often reads the *full original save path* out of
+    // embedded file metadata and uses that as the window title, e.g.
+    // "F:\Cailab\...\TIRF_HEK_Control\myfile.tif" instead of just "myfile.tif".
+    // Concatenating that into outputDir + base produces an invalid path
+    // (a second drive letter/backslashes in the middle of the string) and
+    // saveAs throws FileNotFoundException: "...syntax is incorrect".
+    // list[i] is the real on-disk filename, so build the base name from that.
+    base = sanitizeFilename(stripExtension(list[i]));
+
+    getDimensions(width, height, channels, slices, frames);
+    if (channels < 3) {
+        print("Skipping " + orig + " (fewer than 3 channels)");
+        run("Close All");
+        continue;
+    }
+
+    // Average each channel's frames to one plane.
+    run("Split Channels");
+    c1 = projectChannel("C1-" + orig);
+    c2 = projectChannel("C2-" + orig);
+    c3 = projectChannel("C3-" + orig);
+
+    // Keep an independent copy of the WGA channel (merge below consumes c1/c2/c3).
+    selectWindow(c3);
+    run("Duplicate...", "title=WGA_KEEP");
+    wga = getTitle();
+
+    // Build the color merge just for viewing/judging.
+    run("Merge Channels...", "c1=[" + c1 + "] c2=[" + c2 + "] c3=[" + c3 + "] create");
+    composite = getTitle();
+    Stack.setChannel(1); run("Green");  //run("Enhance Contrast", "saturated=0.35");
+    Stack.setChannel(2); run("Yellow"); //run("Enhance Contrast", "saturated=0.35");
+    Stack.setChannel(3); run("Red");    //run("Enhance Contrast", "saturated=0.35");
+    selectWindow(composite);
+
+    // Ask. Yes = 1, No = 0, Cancel = stops the macro.
+    single = getBoolean("Does this image contain ONLY a single cell?\n\n" + orig +
+                        "\n\nYes = save WGA channel   |   No = skip");
+
+    if (single) {
+        selectWindow(wga);
+        run("Grays");
+        resetMinAndMax();
+        run("8-bit");
+        run("Subtract Background...", "rolling=" + bgRadius);
+
+        // sharpen a little (optional) -- do it before the contrast stretch
+        if (doSharpen)
+            run("Unsharp Mask...", "radius=" + unsharpRadius + " mask=" + unsharpWeight);
+
+        // gentle contrast pop: normalize rescales pixel values to use the full range
+        run("Enhance Contrast...", "saturated=" + contrastSat + " normalize");
+
+        saveAs("PNG", outputDir + base + "_WGA.png");
+        print("Saved single-cell WGA: " + base);
+    } else {
+        print("Skipped (not single cell): " + base);
+    }
+
+    run("Close All");
+}
+
+print("All done.");
+
+
+// Collapse a single-channel multi-frame window to ONE plane; leaves it OPEN
+// and returns its title (or "" if the window doesn't exist).
+function projectChannel(win) {
+    if (!isOpen(win)) return "";
+    selectWindow(win);
+    getDimensions(w, h, c, z, t);
+    if (z * t > 1) {
+        run("Hyperstack to Stack");
+        srcStack = getTitle();
+        run("Z Project...", "projection=[" + projection + "]");
+        proj = getTitle();
+        if (isOpen(srcStack) && srcStack != proj) { selectWindow(srcStack); close(); }
+        selectWindow(proj);
+        return proj;
+    }
+    return getTitle();
+}
+
+function stripExtension(name) {
+    dot = lastIndexOf(name, ".");
+    if (dot < 0) return name;
+    return substring(name, 0, dot);
+}
+
+function ensureTrailingSlash(path) {
+    if (!endsWith(path, "/")) path = path + "/";
+    return path;
+}
+
+// Strip characters Windows won't allow in a filename ( \ / : * ? " < > | ),
+// in case a stray one ever ends up in a base name. replace() takes a regex,
+// so this is one character class rather than looping raw chars (some of
+// those, like * ? |, are regex metacharacters on their own).
+function sanitizeFilename(name) {
+    return replace(name, "[\\\\/:*?\"<>|]", "_");
+}
