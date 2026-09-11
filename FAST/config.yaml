@@ -1,0 +1,46 @@
+name: FAST4TIRF
+version: 1.0.0
+schema: v1
+
+# --- Step 1: convert Supervisely labels -> image/mask PNGs (convert.sh) ---
+# project-dir must contain meta.json plus one or more dataset/{img,ann} folders
+# (i.e. the folder you'd point the Supervisely SDK at), NOT a single dataset's
+# img or ann subfolder directly.
+project-dir: F:\Cailab\Cai students\Amy\Images\Labeled
+# converted-dir is created by convert.sh: it holds images/, masks/, preview/
+converted-dir: F:\Cailab\Cai students\Amy\Images\Labeled_converted
+
+# Supervisely class name -> mask pixel value. Must match train's `classes`
+# count below (0 = background is implicit, don't list it here).
+class-name-to-index:
+  F-actin: 1
+  Focal Adhesion: 2
+  Lamellipodia: 3
+
+# When labeled objects overlap, the last class in this list wins (painted on
+# top). Any class not listed here is painted first / can be overwritten.
+paint-order: [Lamellipodia, F-actin, Focal Adhesion]
+
+# RGB color per mask pixel value, used only for the preview overlay images
+# (and for decoding train predictions back into a viewable image).
+colormap:
+  0: [0, 0, 0]        # Background
+  1: [0, 255, 0]      # Actin
+  2: [255, 0, 0]      # Focal Adhesion
+  3: [255, 255, 0]    # Lamellipodia
+
+preview: true
+preview-alpha: 0.4
+
+# --- Step 2: train (run_train.sh) ---
+# Leave unset (or omit) to train from scratch (ImageNet-pretrained encoder
+# only). Point at fast_model.pth to fine-tune the existing FAST checkpoint;
+# layers whose shape doesn't match `classes` below (segmentation_head) are
+# left randomly initialized.
+pretrained-weights: F:\Cailab\Cai students\Amy\FAST\fast_model.pth
+epochs: 10
+out-dir: F:\Cailab\Cai students\Amy\supervisely_run
+batch-size: 2
+classes: 4               # background + Actin + Focal Adhesion + Lamellipodia
+lr: null                  # null = auto (1e-4 if pretrained-weights set, else 1e-3)
+seed: 42
