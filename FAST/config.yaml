@@ -38,7 +38,7 @@ preview-alpha: 0.4
 # layers whose shape doesn't match `classes` below (segmentation_head) are
 # left randomly initialized.
 pretrained-weights: F:\Cailab\Cai students\Amy\FAST\fast_model.pth
-epochs: 10
+epochs: 50
 out-dir: F:\Cailab\Cai students\Amy\supervisely_run
 batch-size: 2
 classes: 4               # background + Actin + Focal Adhesion + Lamellipodia

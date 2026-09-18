@@ -10,7 +10,7 @@
 #   ./run_train.sh config.yaml --epochs 5   # extra args are passed through
 
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$(dirname "${BASH_SOURCE[0]}")/../FAST"
 
 CONFIG="config.yaml"
 if [[ $# -gt 0 && "$1" != --* ]]; then
