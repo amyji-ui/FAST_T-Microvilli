@@ -10,37 +10,62 @@ project-dir: F:\Cailab\Cai students\Amy\Images\Labeled
 # converted-dir is created by convert.sh: it holds images/, masks/, preview/
 converted-dir: F:\Cailab\Cai students\Amy\Images\Labeled_converted
 
-# Supervisely class name -> mask pixel value. Must match train's `classes`
-# count below (0 = background is implicit, don't list it here).
+# Supervisely class name -> mask pixel value. Values must be contiguous
+# (1..classes-1) and match train's `classes` count below (0 = background is
+# implicit, don't list it here).
 class-name-to-index:
-  F-actin: 1
-  Focal Adhesion: 2
-  Lamellipodia: 3
+  F-actin: 1        # microvilli
+  Lamellipodia: 2   # cell body
+
+# Classes that exist in the Supervisely project but are deliberately left out
+# of training. Their labels are skipped silently (the pixels show whatever
+# class is underneath, otherwise background).
+ignored-classes: [Focal Adhesion]
 
 # When labeled objects overlap, the last class in this list wins (painted on
 # top). Any class not listed here is painted first / can be overwritten.
-paint-order: [Lamellipodia, F-actin, Focal Adhesion]
+paint-order: [Lamellipodia, F-actin]
 
 # RGB color per mask pixel value, used only for the preview overlay images
 # (and for decoding train predictions back into a viewable image).
 colormap:
   0: [0, 0, 0]        # Background
-  1: [0, 255, 0]      # Actin
-  2: [255, 0, 0]      # Focal Adhesion
-  3: [255, 255, 0]    # Lamellipodia
+  1: [0, 255, 0]      # F-actin (microvilli)
+  2: [255, 255, 0]    # Lamellipodia (cell body)
 
 preview: true
 preview-alpha: 0.4
 
-# --- Step 2: train (run_train.sh) ---
+# --- Step 2: train and test (run_train.sh) ---
 # Leave unset (or omit) to train from scratch (ImageNet-pretrained encoder
 # only). Point at fast_model.pth to fine-tune the existing FAST checkpoint;
 # layers whose shape doesn't match `classes` below (segmentation_head) are
 # left randomly initialized.
 pretrained-weights: F:\Cailab\Cai students\Amy\FAST\fast_model.pth
 epochs: 50
-out-dir: F:\Cailab\Cai students\Amy\supervisely_run
+out-dir: F:\Cailab\Cai students\Amy\supervisely_run_3class
 batch-size: 2
-classes: 4               # background + Actin + Focal Adhesion + Lamellipodia
+classes: 3               # background + F-actin + Lamellipodia
 lr: null                  # null = auto (1e-4 if pretrained-weights set, else 1e-3)
 seed: 42
+
+# --- Step 3: quantification (quantification.py) ---
+# Group of each image, decided from its filename: the first group with a
+# pattern contained in the filename (case-insensitive) wins. Images matching
+# no group are reported as "Unassigned". Order here = order in the plots.
+groups:
+  CD8AA: [CD8AA]
+  CD8BB: [CD8BB]
+  Control: [Control]
+
+# Classes whose objects are counted (contours) and compared. List only classes
+# where a per-image count is meaningful: the lamellipodia/cell body is one
+# object per image, but its converted mask is split into many islands where
+# F-actin is painted over it, so counting it is misleading. Area fractions are
+# always reported for every foreground class. [] = count nothing; omit the
+# key to count every foreground class.
+count-classes: [F-actin]
+
+# Minimum contour area (px^2) for an object to be counted, per counted class.
+count-min-area:
+  F-actin: 0

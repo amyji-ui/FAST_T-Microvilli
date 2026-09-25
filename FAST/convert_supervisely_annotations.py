@@ -27,7 +27,7 @@ All parameters can also be passed/overridden on the command line, e.g.:
         --config config.yaml --project "../Images/Labeled" --out "../Images/Labeled_converted"
 
 The resulting <converted-dir>/images and <converted-dir>/masks folders can be
-passed directly as image_dir/mask_dir to train_supervisely.py. Pass
+passed directly as image_dir/mask_dir to train_TIRF.py. Pass
 --no-preview to skip generating <converted-dir>/preview/.
 """
 
@@ -44,30 +44,9 @@ import numpy as np
 import yaml
 from PIL import Image
 
-# Fallback defaults, used for any setting not found in --config and not
-# passed on the command line. Must match the class-index convention used by
-# train_supervisely.py's --classes 4 (0=background, 1=Actin,
-# 2=Focal Adhesions, 3=Lamellipodia). No Filopodia class in this TIRF
-# adaptation.
-DEFAULT_CLASS_NAME_TO_INDEX = {
-    "F-actin": 1,
-    "Focal Adhesion": 2,
-    "Lamellipodia": 3,
-}
-
-# When two labeled objects overlap, the one painted *last* wins. List class
-# names here in "paint order" (first = painted first / bottom layer, last =
-# painted last / top layer). Adjust to taste for your data.
-DEFAULT_PAINT_ORDER = ["Lamellipodia", "F-actin", "Focal Adhesion"]
-
-# RGB colors for the preview overlay, indexed by class id (must line up with
-# class-name-to-index / train_supervisely.py's COLORMAP).
-DEFAULT_COLORMAP = {
-    0: [0, 0, 0],  # Background
-    1: [0, 255, 0],  # Actin - Green
-    2: [255, 0, 0],  # Focal Adhesions - Red
-    3: [255, 255, 0],  # Lamellipodia - Yellow
-}
+# The class setup (class-name-to-index, paint-order, colormap, ignored-classes)
+# is defined only in config.yaml -- nothing class-specific is hardcoded here,
+# so changing the classes is a config-only edit.
 
 
 def colormap_dict_to_array(colormap: dict) -> np.ndarray:
@@ -94,7 +73,7 @@ def base64_to_bool_mask(data: str) -> np.ndarray:
     raise ValueError(f"Unexpected decoded bitmap shape: {decoded.shape}")
 
 
-def build_mask(ann: dict, class_name_to_index: dict, paint_order: list) -> np.ndarray:
+def build_mask(ann: dict, class_name_to_index: dict, paint_order: list, ignored_classes=()) -> np.ndarray:
     height = ann["size"]["height"]
     width = ann["size"]["width"]
     canvas = np.zeros((height, width), dtype=np.uint8)
@@ -112,7 +91,8 @@ def build_mask(ann: dict, class_name_to_index: dict, paint_order: list) -> np.nd
 
     for class_name in ordered_classes:
         if class_name not in class_name_to_index:
-            print(f"  ! skipping unknown class '{class_name}' (not in CLASS_NAME_TO_INDEX)")
+            if class_name not in ignored_classes:
+                print(f"  ! skipping unknown class '{class_name}' (not in class-name-to-index or ignored-classes)")
             continue
         class_idx = class_name_to_index[class_name]
         for obj in objects_by_class[class_name]:
@@ -154,11 +134,15 @@ def main():
     if not project_dir or not out_dir:
         parser.error("project dir and output dir are required: set project-dir/converted-dir in --config, or pass --project/--out")
 
-    class_name_to_index = config.get("class-name-to-index", DEFAULT_CLASS_NAME_TO_INDEX)
-    paint_order = config.get("paint-order", DEFAULT_PAINT_ORDER)
+    class_name_to_index = config.get("class-name-to-index")
+    paint_order = config.get("paint-order")
+    colormap_dict = config.get("colormap")
+    if not class_name_to_index or paint_order is None or not colormap_dict:
+        parser.error("class-name-to-index, paint-order and colormap must be set in the --config file")
+    ignored_classes = config.get("ignored-classes") or []
     preview_enabled = not args.no_preview and config.get("preview", True)
     preview_alpha = args.preview_alpha if args.preview_alpha is not None else config.get("preview-alpha", 0.4)
-    colormap = colormap_dict_to_array(config.get("colormap", DEFAULT_COLORMAP))
+    colormap = colormap_dict_to_array(colormap_dict)
 
     images_out = os.path.join(out_dir, "images")
     masks_out = os.path.join(out_dir, "masks")
@@ -172,7 +156,7 @@ def main():
     with open(meta_path, "r") as f:
         meta = json.load(f)
     known_classes = {c["title"] for c in meta["classes"]}
-    unmapped = known_classes - set(class_name_to_index)
+    unmapped = known_classes - set(class_name_to_index) - set(ignored_classes)
     if unmapped:
         print(f"Warning: classes in meta.json with no class-name-to-index entry: {unmapped}")
 
@@ -193,7 +177,7 @@ def main():
             ann = json.load(f)
 
         print(f"Converting {img_name} ...")
-        mask = build_mask(ann, class_name_to_index, paint_order)
+        mask = build_mask(ann, class_name_to_index, paint_order, ignored_classes)
 
         # Sanity check mask/image size agree.
         with Image.open(img_path) as im:

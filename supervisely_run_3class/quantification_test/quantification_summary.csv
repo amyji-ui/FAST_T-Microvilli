@@ -1,0 +1,3 @@
+group,class,n_images,manual_count_mean,manual_count_std,predicted_count_mean,predicted_count_std,count_ratio_mean,count_ratio_std,manual_fraction_mean,manual_fraction_std,predicted_fraction_mean,predicted_fraction_std
+CD8AA,F-actin,6,24.166666666666668,8.28049917979989,49.0,23.52020408074726,2.0182264957264957,0.5701394941982355,0.3345767832949664,0.12540346983579503,0.28748735654398266,0.10732305751645299
+CD8AA,Lamellipodia,6,,,,,,,0.6654232167050337,0.12540346983579503,0.7125126434560173,0.10732305751645299

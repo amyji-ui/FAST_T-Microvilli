@@ -19,4 +19,4 @@ if [[ $# -gt 0 && "$1" != --* ]]; then
 fi
 
 PYTHON="../python3.11/Scripts/python.exe"
-"$PYTHON" train_supervisely.py --config "$CONFIG" "$@"
+"$PYTHON" train_TIRF.py --config "$CONFIG" "$@"
