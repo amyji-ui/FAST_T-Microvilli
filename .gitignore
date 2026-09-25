@@ -2,13 +2,18 @@
 python3.11/
 
 # Model weights (download separately — see FAST/inference_demo.ipynb)
-FAST/fast_model.pth
+*.pth
+*.pt
+*.ckpt
+
+# Training logs
+*.tfevents.*
 
 # Python cache / notebook checkpoints
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-#Images
+# Images
 Images/
 supervisely_run/
