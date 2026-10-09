@@ -1,0 +1,1123 @@
+{
+    "description": "",
+    "tags": [],
+    "size": {
+        "height": 512,
+        "width": 512
+    },
+    "objects": [
+        {
+            "id": 1,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtL8QCzMASQYslZylAEpH08XxxAJSd+DnYyHHAQYFJf9X3S9Wkj0U/6p8wrxySezdZ4abvskEb3z2DSZxx7bCl2mFbpKhHcUpnYWppy2KDLpi+nV7T82Kby5xvTJc+Z6c2GhfRdYY0Dme7r6uaxzSmgCAAUALLc=",
+                "origin": [
+                    377,
+                    126
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtFAzMcBJBguipzkA1JWni6OIRyypgcbGZsNGFgU8/4v3O8ZmvHk8onliut5KlsUw/sU3ft2Kl2POXlf5uT9mKeG7pVnpl6X+cljX5XEx3MuS2oByDRPVz+XdU4JTQDQmyR6",
+                "origin": [
+                    171,
+                    131
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtKCQCzMASQYgs/t1AVS/p4ujiESkqEHGxkPOfAwKOb9X5gcFb92gr3zPLZKiSntij8lFeOdTxyfMDV5wtTtGzcVSU9fs+bjNNFjE0Ufn1B9fEL38bTFhafdH09af+yUv9u8uMe9wkK9Xw0PgqzwdPVzWeeU0AQA8dEyCg==",
+                "origin": [
+                    236,
+                    159
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLsQCzGASQYNDffNARSlp4ujiEcsrIHGxkPGPAcVvjy/2KcccfEM8HPVv403f/s+p9Z8c9S/FCQ5ucplV2d/IdixDguT+zQAhnm6ernss4poQkAnNoo0A==",
+                "origin": [
+                    181,
+                    171
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLcIDYHkGCImnf6OZAy8XRxDOGQVT3YyMhsyHNEYcv/C9d/cBv+TDmR6Tfv2RMgcYZzpnCS35EaoWfBM/bbfD45c7m88hpenqcu/wpB5ni6+rmsc0poAgCDKySy",
+                "origin": [
+                    158,
+                    176
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtICQMzBASQYrsoqeAMpbU8XxxAOWd+DjYINCgLMG0r+L1ytIDffRXbjknUKWR0Bzo9Cw2tedcTnGk6xsQrjYAv3+DANpN3T1c9lnVNCEwBp+htz",
+                "origin": [
+                    133,
+                    195
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJsQMzPASQYHq14GAOkND1dHEM4ZHkPMjIyMHAcVrhm/0X0kMhiiaMTFvKkajhLnvJwlrrYobZlD7NuIj9/du2tSJBmT1c/l3VOCU0AJ00ZoQ==",
+                "origin": [
+                    67,
+                    197
+                ]
+            }
+        },
+        {
+            "id": 8,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLsQMzHASQYjplFHgdS2p4ujiEcsqIHGxkZFHgOK3z6f/Gqo0TSvhn6xUbqxUbLLU2XP/P+vFRRapGgnEEeH0fa+7dCIO2ern4u65wSmgCO6hvD",
+                "origin": [
+                    105,
+                    204
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtKcQCzDASQYpj089QRIeXm6OIZISOoebGQ8YMDRYPDjf8ay0s4jAirTJPol3B9nyPQuLjTpO3bxh6T9Y/VClb4jEy2cbECQaSNLEueRSYLObjyShimspybXzFeT4W1Vf5wOMt3T1c9lnVNCEwCShSjh",
+                "origin": [
+                    465,
+                    217
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJSQKzNASQYnNmPgzg7PV0cQywEcw92TmQx5DliYPR/wW+baX9yZRMknsi3Ke3nmW0DQu13VHKKJm844czhK/eJs3lPCpeC/sxDKuIznSb7LivwmCik92miUF3Hlg/e0z44b/swSdnmCYd5Kndzi2cKd7OAnZK3RAqHwgkhtp8sLJkPldunGJxUVPUp8uCcLBN0SKV9SkDKZKFZOpecJrpGaWzy4PadpbPQY7KqSOamVs9ZOYmT1KJnLDkpaHfpiRBbZhFns8lO1pSfzBPd9DUapVq2gDzj6ernss4poQkAFihTzA==",
+                "origin": [
+                    243,
+                    225
+                ]
+            }
+        },
+        {
+            "id": 11,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJsQMzFASQYNqUWvAdSKp4ujiEcsqIHGxkZFHgOK3z6f7HUSU3q0oRnV+bMWv9z1nrL1CeMZZlcHOeMLGaB9Hm6+rmsc0poAgAYBxty",
+                "origin": [
+                    280,
+                    231
+                ]
+            }
+        },
+        {
+            "id": 12,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIGQKzMASQYvmtfywNSKzxdHEMsBHsPdjI2GwgccVj5f5G5DWddk2WaisJ7ybJP0x56xxnGPGF1dvcSqgqaYDDJnSlRKbuIQzlyYvCME7Y/OY13Kvr+UDaWbJnZkyKmdmlyfaKK7E5htksnnF6ccJ3mpGy/SUzq5yT1h0rqlSJ6RRPSHypZV4pJ3fRQNGEK4pB15FqoHsRhO9FJQqPVIIArUaV1w+SCSV43OB4qTGXYxCm9VMihjHFi0JLPjA4u6ooOIRzvQW73dPVzWeeU0AQAFcpJvA==",
+                "origin": [
+                    367,
+                    231
+                ]
+            }
+        },
+        {
+            "id": 13,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtICQCzIASQYPh4plgBSbp4ujiESkq4HGxmZFHiYN3z5v1h7w0rPK6LapklLwmwCleetEA1fIeoeoNy3IEzAfa1A+NqO5WGPVk6V2Jp0tWN91aPl636sfsx8dZ4gr/Cz9ddBJnu6+rmsc0poAgC0OSri",
+                "origin": [
+                    349,
+                    235
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJiQMzFASQYpp7+yA6kLDxdHEM4ZFMPNvIeMhBgMLz/z7lecaVL1Js9vKcuR3wymFYk5f3JeJrAMcV4yfacXl3nvN7+PSZPzrPe4ePm0v699h3ILE9XP5d1TglNALFUJAI=",
+                "origin": [
+                    104,
+                    239
+                ]
+            }
+        },
+        {
+            "id": 15,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtKsIMwBJBhWsFRaAikpTxfHEA5Z3oOMjEBek8Jf+1tMnIbnLB6rFAQ7sDJLT1lTAlLt6ernss4poQkASVkRTA==",
+                "origin": [
+                    220,
+                    245
+                ]
+            }
+        },
+        {
+            "id": 16,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLMQMzCASQY8txu3QZS4p4ujiEcsqwHGRmBvCaFP/a7FLQvn7BSVGVhPnSFcSZIqaern8s6p4QmAErbEaI=",
+                "origin": [
+                    280,
+                    250
+                ]
+            }
+        },
+        {
+            "id": 17,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtI8QMzOASQYJG9+/gGkVD1dHEM4ZF0PNvI2GDCwKOb9X3jfJJDb8pnGs8sxZ6/+yYoTdO5jj/nFzrqyiv8qSKOnq5/LOqeEJgAnURsu",
+                "origin": [
+                    105,
+                    251
+                ]
+            }
+        },
+        {
+            "id": 18,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtICQCzLASQY2tg2JwOpDE8XxxAJSduDjYlHFHgYDO/+c95daTA1qWaTUV+MZHjfscnze6bO71EHIQl/juRWg3kcj+M/SfqDkHFYUY+25bGpMY+1ru84JeUe+VgjOybyMZQlk9q7eM3HyWs+dtooz7cP6pOV2ce7YhHIbk9XP5d1TglNANLhOdE=",
+                "origin": [
+                    213,
+                    251
+                ]
+            }
+        },
+        {
+            "id": 19,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJ8QMzGASQYrhV8SABSKp4ujiEcsr4HD/IeUGBgNrz/z3n5qooG2WcdZ0I/n7JJWvfn2QtmLXY2lgP740CaGTxd/VzWOSU0AQA5ZRvu",
+                "origin": [
+                    17,
+                    252
+                ]
+            }
+        },
+        {
+            "id": 20,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIGQCzHASQY/M8fkgVSKz1dHEMsBKce5GxqMmBg2XDmv7xtdGbgxwiVzvtXBe5fUZt26wh7qcAVoeC/GldEA6cv0fN81eURK7Bon8dejkeeRx1tuxX/Bbr4FgrHXxVw5t3YqZ8l7CwYXBPizePq89Hx7aNlHZr3rurlZQGpK3pmpkdE1md1Lm2b8WhF2UbtpM7Ft45MVppmsaoi9IjQ8qwOVT/Rjd3Brm8ehQjutgh9pOc3dUd3sCh/4apHD/nff9WV9IicoA5yvKern8s6p4QmAGExV/I=",
+                "origin": [
+                    289,
+                    258
+                ]
+            }
+        },
+        {
+            "id": 21,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJwBNgHJ/olQTkcNChoKAAAADUlIRFIAAAA4AAAAMQgAAAAAquI1CgAAAP1JREFUSA2dwQFigzAMBMHd/z/62kAAGeTE7YxhI72AdAxv0gkgDcNBnsIvaUg4yU14kYaEQqqwkYYQCrmEnTSEMJBdOEhDIAzkJRykI7/CnPRkEyZkQnahJTNyCE8yJafwIFNShJHMSRUGMieDUMmcjEIlU3ITKpmRm1DJjNyFSibkIQykJY1QSUc6oZKGtEIlTzIRCnmQmVDInUyFQm5kLhQykg/CRUbySbjIQD4KJxnIZ+EklXwT3qSSr8JOKvku7KSQBWEjhawIG7nIirCRiywJGznJmrCTN1kTDrKRNeEkL7ImFAKyJlSCLAqVyLpwUf4m7JS/Chv5j8gPekg5MURmPu0AAAAASUVORK5CYII98nWn",
+                "origin": [
+                    93,
+                    273
+                ]
+            }
+        },
+        {
+            "id": 22,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJCQCzHASQYWNIFPwCpAk8XxxANUd+DnYzMigJHDHb/X6S+gV/c0+6hQKVTYJjEpkMTBKf1bFjSunTLhili04IOLZ6ywcUrQik8oikmkeOE4LQGmcQTigJtMUyJJ1RbFF05fGe1KPo6TVZceNLAJLJN7XTAE0ORSp7pNSoynyYyfHrOzqItJz3BUmonyA2ern4u65wSmgA+2jZO",
+                "origin": [
+                    152,
+                    275
+                ]
+            }
+        },
+        {
+            "id": 23,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJSIMwBJBh6FIWFgFSFp4tjiIZo7sHOxGYHBmaDyv8L51Yv8LVYsuCjmulRza1HFEHoaPAVIf/AaJuWW4/CV3j/4XgldL9p19HpEq/E/ietsi/sXsknGDxXyFtWKHhvx8q4IwH6Qs6+G69MW7DsRpZ3gHNMVueCDm9dxbauaF9HmysCzjahOvJfheQlt5622wZyi6ern8s6p4QmANknP1g=",
+                "origin": [
+                    190,
+                    275
+                ]
+            }
+        },
+        {
+            "id": 24,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtKcQMzDASQYppqfqAdSup4ujiEcsqoHGxmZDXmOKGz5f+H6Hm5L73kLbT63/DwyZ8bkn6fnzJr8TJi3ctYc+dcsPBxfmXsVQAZ4uvq5rHNKaAIATxMgJA==",
+                "origin": [
+                    237,
+                    275
+                ]
+            }
+        },
+        {
+            "id": 25,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtI8QMzGASQYLrUqxAIpZU8XxxAOWduDjbwMCjwNBj/+Z5RcXGPaxvNYuGfpkUkRRUeLGdj42VhmBLf8AmnzdPVzWeeU0AQApekYrg==",
+                "origin": [
+                    375,
+                    276
+                ]
+            }
+        },
+        {
+            "id": 26,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIsIDYHkGBYPXVCFpBS8nRxDOGQZT3IyAjkNSn8sd+lELbMp1fKNOvKBSBYcZFx+yperuvZcsUgXZ6ufi7rnBKaAHi3GHI=",
+                "origin": [
+                    143,
+                    278
+                ]
+            }
+        },
+        {
+            "id": 27,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtKsQMzGASQY9CZwTwdS0p4ujiEcsrwHGRkZGDgOK1yz/yL6SUzNzZnXtDDfi43F4G+JOki5p6ufyzqnhCYAXQkRcw==",
+                "origin": [
+                    249,
+                    288
+                ]
+            }
+        },
+        {
+            "id": 28,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtI8QMzOASQYJG9+/gGkVD1dHEM4ZF0PNvIyKPA0GPz4nzGns3Btj0STQL/Q/I09qTqditcZ44TYWa7+TzwI0ujp6ueyzimhCQAS4Bp9",
+                "origin": [
+                    384,
+                    288
+                ]
+            }
+        },
+        {
+            "id": 29,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLsQMzPwQASyepKAlJ6ni6OIRyysgcbGQ8Y8BxW+PL/YpzViZa2DL9Zy5+trMyaZ7T8jGZxl6WhOo+l8v7a+Rf5uTOSj7wHmeDp6ueyzimhCQAqkx9C",
+                "origin": [
+                    231,
+                    290
+                ]
+            }
+        },
+        {
+            "id": 30,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtFALMgBJBiUp1Q6ACknTxfHEA5Z14ONhUcMGFgUt/1f9D43cqbDP99/PDvbis6slvmstd7yVHJfy0+VZ15n1I3CTcIz7CpN5tvMUl7/bOpixev80osEBZ5Uf+4Bmerp6ueyzimhCQBw6imR",
+                "origin": [
+                    327,
+                    290
+                ]
+            }
+        },
+        {
+            "id": 31,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIKQCzDASQYVFc++gekGjxdHEM0REsPNjIeVhA4YlD9f+F6VqdfAROeaJsUKS2cMDdRVfuwm1jb3BChc0uED01VEFjnMqtgcclDt7YCxf6CJT4PHVK4Jot84moOAWNhNs0lHHNFglra9yzh4p+ZIqgmmSKq9hKMhdUywVhc7tKJ+Rc81f87Kd9lL7wjIy1z3bEO5CZPVz+XdU4JTQCBAz+x",
+                "origin": [
+                    277,
+                    307
+                ]
+            }
+        },
+        {
+            "id": 32,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLSQCzEASQY+jf8cgRSgZ4ujiESkrkHOxkbDHiOGFT/X9i/3GFykOc3plNuO04q1SzhnmyycIKaSFCr00ynxTaHnFI4euc8EdKSZHFS5lcM+TQx4GSKxhKjPSmJO07OZ5kwl1nMQYhvlkSCKsgST1c/l3VOCU0AqygrZA==",
+                "origin": [
+                    193,
+                    316
+                ]
+            }
+        },
+        {
+            "id": 33,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtKSQCzBASQYtO5xSgGpRE8XxxAN0dyDjYKHDXiOGBT9X7g/6HFc8umGGNYnag0xLUriC0+IzPJZeFKky6h1Ec9CzeUflsoccr7Z6lrJba/kfaNjSoFQiwGHh8QSCbbMtmYbHv1P6REp6gtPejpNdOQ48YWxxF5C2ElQFmypp6ufyzqnhCYAkP4w4g==",
+                "origin": [
+                    357,
+                    316
+                ]
+            }
+        },
+        {
+            "id": 34,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIcQMwKIhhif33qBFKyni6OIRyyqgcbeYGyDQp//2dEsx67WHFssoXTGsb6KFam77sufwFp8HT1c1nnlNAEADv4F+I=",
+                "origin": [
+                    263,
+                    326
+                ]
+            }
+        },
+        {
+            "id": 35,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLMIMwBJBiKnV8lAykRTxfHEA7Z5JQf5w/8mN/YOPGhvTKDsBAz00FPcyeQOk9XP5d1TglNAGB7EqQ=",
+                "origin": [
+                    103,
+                    336
+                ]
+            }
+        },
+        {
+            "id": 36,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLcQCzDASQYJolI3QRSQZ4ujiESkroHGxkPKzCwKOb9X7h/JddON8u2Ip6n+XZPjd3tilt2HopJ7Etal7TOyH/m8jPBz7yeeX1eUnnJJnNdBgj2XZBZ+PP08p9P1iu6K1/nPzVbRnLl5kA9kC2ern4u65wSmgBnnjJ+",
+                "origin": [
+                    113,
+                    341
+                ]
+            }
+        },
+        {
+            "id": 37,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtICIMwBJBisZizYC6QcPV0cQyQkfQ92FrI4MjArWv1f8PTW+2MTJio7183ytjuru/7ZRPfPp9b+fDLpJ+dMZaP/Ks88ZiyOeRYs9/lUep5l2z+G61cE+FN3mcuADPV09XNZ55TQBADIzCub",
+                "origin": [
+                    259,
+                    343
+                ]
+            }
+        },
+        {
+            "id": 38,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIcQMwFIhjWrHGIAVLqni6OIRyyogcbGRkUeA4rfPp/8arjtMmCs/SN4o2Wn9F81vLzUI3lY8YrX7nYvbWLhUFaPV39XNY5JTQBAD76G4E=",
+                "origin": [
+                    360,
+                    343
+                ]
+            }
+        },
+        {
+            "id": 39,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtFAzMMBJBjm3MlgBVLGni6OIRyytgcbGZsNGFgU8/4v3J/VO+H0E8G2O0l6O4/uEXoWOkP52eSfUywvyVy0KTo9Yb+8mhEPt8q61CcgYzxd/VzWOSU0AQADziJf",
+                "origin": [
+                    205,
+                    346
+                ]
+            }
+        },
+        {
+            "id": 40,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJsQMzOASQY+H4nGwIpOU8XxxAOWd6DjIwMDByHFa7ZfxGVujjh2dSFEodOzGbefJyddVrTNDeQDk9XP5d1TglNAPaDFhE=",
+                "origin": [
+                    230,
+                    348
+                ]
+            }
+        },
+        {
+            "id": 41,
+            "classId": 14479149,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "F-actin",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJ8QKzMASQYGgVTngKpMk8XxxANUdODjYzMijwMinn/F15+EX1C6mcK785NbTGRzuvWOPYBkUHfGonwsB5t7ceTr/7g7t1/4Qe3ZL3g4841Hz37ClWv7zhluu6TZLjd41PGfTaPTxiHVR7TOq9Q2XbC2MXO+YRpSmrv1KmmJwSPnRJMftrlaGcfpKiscGqZTRbIJZ6ufi7rnBKaAPUDQXU=",
+                "origin": [
+                    245,
+                    362
+                ]
+            }
+        },
+        {
+            "id": 42,
+            "classId": 14479150,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Lamellipodia",
+            "bitmap": {
+                "data": "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",
+                "origin": [
+                    44,
+                    159
+                ]
+            }
+        },
+        {
+            "id": 43,
+            "classId": 14479150,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Lamellipodia",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIbgDiFA0gwMBc/3Q0k/TxdHEMqGM8e5E5abMHAevDdb/lfa2WTeRzlVc6krXrS80Gh+NDkmvaS1tYzHNw/2VZyuRvprHlitZLDFUQbaXLzGimBaC5dI5U9J1ODhG6leFRMXr1E4cuJjg2TupcolJzs+KA4/UTgi8mKiarTPVwzQHQ4hHZ+5un6YoJgovcyCO2eBqQnMkLoSZsP5Rt5nnKaP0ekL6XvSoueJYc/08TlAYrBS7RKTsbdmHRBwXiJYslJdwkl4yWqJSeVeCZJXhJ5p2y8RPeOW5qH+47uMxP6CsRnKso+1DNytnKabdNaCKInrzkkMVMxd6GnGZBWANLbDklIqvsu9C07JAClJSTVdBf6fjukIKmqu9C57JCBpDLvQm8QrcS70P/bIQ1JxdKHPDe5F6c0XGkNTtHvmfR5idYctejEKXPUQh/a3OQ4/ERnJRfzE+WeyZOXqPVMCJ2hxM+YotyQ4xFr4W93aPrJ9iutn58o18xes0SLZ0J/AXPlxFUF83Jaok9MDmll/CSYp+gfJNp2QuuO47wlajyTthewV06a9UGNf6G32EOxTwqmiYr6C53jDvmyLFHac9L7xQT5h2ZNIS2tOk7te1pud0xpNY9sMYts3a1hf6h5zSEvMZAXJ9u0vg+UO8Qf2TpVx6n7S4t+gIJOiqDZE9UrnvE7/FTWPFF9cyJ4xWThQ6VKD53lDjW2yM4U0BM+bDFTWO+ygZ8ep+wnES+ex09mXVDIX3gAKMAlukmQCyiwKEAt+qGHYs+kbqfON63KT5XnqIi3Mv1UlenIaQ0GyipUP/RIUZ+jCBS8yaWqtL/FbqfaGaGfuiUnTRNnFQlUPZll4GvJJVvkO2OZSAsfUC7Iy2lyjMgyz8AVRidCE6eJtEr9bDPwPuU0s8Z9horoQo99KmcmzgpQui+0zCNUY8J7zsdTVgUo3Bdx0yx96LFPl0cgk4O9qLmgr2FLS/wTtYV+Zks035yodWrN8Yy+MSG6VenmpL4Pit+5WDcp2z70zRPnS3GvOjT7jv4fNetLomKf7DmsP3UD0/of/UOzZTzjKybWN3wB8mwtFfecuA8MnG4gU/nPhP3q6S3yn74/mfJB4T+DparNCXuHc5wK/xv+M3zVvBGz4cnmelAO83T1c1nnlNAEAOiqeVw=",
+                "origin": [
+                    313,
+                    248
+                ]
+            }
+        },
+        {
+            "id": 44,
+            "classId": 14479150,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Lamellipodia",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLsIMwBJBgeWnLwAykFTxfHEA5Z2YONvAwMPM0Kf/9nTOfruVhxzHjeEY8egQeMV0vZmU1O26eC9Hi6+rmsc0poAgAmSxaO",
+                "origin": [
+                    138,
+                    301
+                ]
+            }
+        },
+        {
+            "id": 45,
+            "classId": 14479150,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Lamellipodia",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIgNicHkGDQO/voPJDS8HRxDOGQNT3YyHtAgYFFMe//wv2mgRzKR2ROxpy9bHM29FkHz8+jT34w3G3kZL+788YPkF5PVz+XdU4JTQCi4R74",
+                "origin": [
+                    119,
+                    319
+                ]
+            }
+        },
+        {
+            "id": 46,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLGQKzKASQYTrn2FQCp1Z4ujiEWglMPMjYdUhBgOfjuv33VOyU9NS6VkJORDDuV5RdONH3pNFEVgtW1gw61+nhyJn/y9apw+OcpLCf0RGCecOMGV87ZUzac3nAWDL05q104rFkaP0yReSLwznOi2pqT7XtaRS0nCj174uM1YxK3ZqLbuiUtnD+V8hN96jyE21IcZhkoOH8SqjvZsqcl30jVd8cky8xDU894cqpvUoh9keLqd8gx7w+jg6mq0pGfYc4g53u6+rmsc0poAgDLxFT6",
+                "origin": [
+                    350,
+                    168
+                ]
+            }
+        },
+        {
+            "id": 47,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJwBpQFa/olQTkcNChoKAAAADUlIRFIAAABnAAAAMwgAAAAArzVJxAAAAWxJREFUWAm1wYkRgzAABLHd/ou+GDBvgGBnkKRf5DHpFDbkF+kT9uSedAlH8iVUgnQJ32QnbCg9wilZhD3pES7IJBxIj3BJCF+UDqGV0iE0EtkKIL+EmYTfBGQVRvJDqKQI92Qgi1DJrVDJINyRiczCQu6EiUzCNamkCiu5E0ZShWtSSRU25EYYyCJckkomYUtWAdkIA1mFazKRUdiTWShkFQayEa7JSEZhT2ahkEUYyU64JoUMwoHMwkhGYSLfwjkpZBAOZBbOyIlwSgopwpFU4ZTcCyspZBBAIFRShVPSSAYBKUIlVTgljWQrVDIJ56SRbISnpJGswlPSSqrQQFrJKLSQZjIITaSZFKGJtBMITaSDEJpIDwktpI+E56SX4TnpZnhM+hkuCWElfzBckCpM5A+GU7IRCvmH4YQcBOQfEg7kBRL25A0SduQVQtiQdwiEhbxEilDJW6QIE3mNDMJIXiOjUMh7ZBKQF30ApqVdMtN8tbEAAAAASUVORK5CYILaKqPl",
+                "origin": [
+                    166,
+                    187
+                ]
+            }
+        },
+        {
+            "id": 48,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtFAzMEBJBjYfbWEgZSGp4tjCIes78FGXgcGBpaN9/452zddeGY45fSdQ3uM5j9b/nNKpYufsx/7bWMO1niVHJBWBk9XP5d1TglNABqfGpY=",
+                "origin": [
+                    376,
+                    201
+                ]
+            }
+        },
+        {
+            "id": 49,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIgNisHkGCI5FfaAqTkPV0cQzhkRQ8yMjIwcDAp/LG/xfPo6pEr3F+VXrVeOSIzpZiV5fKupXwgLZ6ufi7rnBKaAACiFpI=",
+                "origin": [
+                    268,
+                    203
+                ]
+            }
+        },
+        {
+            "id": 50,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtLcQMzHASQY7nDt9ARSpp4ujiEcsqYHGwUbDBiYFev+L0z+qvVk84TkDoOWGcopfTJntd0/n7pY41S89OfUnaf+JK0zmC93JoCP97RrfC3IIE9XP5d1TglNAEjeI7A=",
+                "origin": [
+                    231,
+                    210
+                ]
+            }
+        },
+        {
+            "id": 51,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtKCQMzBASQYrO57lwIpLU8XxxAO2diDjHwNCgIHNrz93z9Potky46m4/lPh2TqGHEdUCo30jnkmC8llpHCwuC/N4gfp9nT1c1nnlNAEAE4AGZg=",
+                "origin": [
+                    451,
+                    308
+                ]
+            }
+        },
+        {
+            "id": 52,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtIgNhcHkGBYETkhEUjpeLo4hnDIqh5sZGQ25DmisOX/hes7+H3tJC3PTlb/3HKm80znjMkGy22KP5n/YnRax8V10OmmFki/p6ufyzqnhCYA6pIeYg==",
+                "origin": [
+                    243,
+                    310
+                ]
+            }
+        },
+        {
+            "id": 53,
+            "classId": 14479151,
+            "objectId": null,
+            "description": "",
+            "geometryType": "bitmap",
+            "nnCreated": true,
+            "nnUpdated": false,
+            "labelerLogin": "pseudo_label.py",
+            "createdAt": "2026-10-07T20:18:24.857215Z",
+            "updatedAt": "2026-10-07T20:18:24.857215Z",
+            "tags": [],
+            "classTitle": "Focal Adhesion",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtFAzM8BJBikPKRWAykrTxfHEA5Z24ONjM0GDCyKef8X7p+1asJ1lf6Jf3hPGk5/Yrb9iZF7ktzJPZdqLtVM+inyWeuM9vTKJzMes/vJ8/NyzLaKApnm6ernss4poQkA64MlAg==",
+                "origin": [
+                    246,
+                    328
+                ]
+            }
+        }
+    ]
+}

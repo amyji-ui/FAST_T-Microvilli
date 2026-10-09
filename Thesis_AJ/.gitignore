@@ -1,0 +1,18 @@
+# Python virtual environment
+python3.11/
+
+# Model weights (download separately)
+*.pth
+*.pt
+*.ckpt
+
+# Training logs
+*.tfevents.*
+
+# Python cache / notebook checkpoints
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Images
+Images/

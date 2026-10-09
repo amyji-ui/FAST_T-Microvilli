@@ -1,0 +1,134 @@
+FAST / TIRF microvilli pipeline - command reference
+=====================================================
+Run these from PowerShell, from the project root (F:\Cailab\Cai students\Amy\Thesis_AJ).
+All four scripts live in scripts\ and read Thesis_AJ\config.yaml by default -
+edit that file for anything that isn't a one-off override below. All paths
+below (run-dir, images-dir, out-dir) are relative to Thesis_AJ\, since the
+scripts cd there before running.
+
+NOTE: this file still uses the old Images\Labeled\CD8AA / Images\CD8AA_Cleaned
+subfolder names from the pre-move layout. Thesis_AJ\Images currently has
+different subfolder names (Labeled_Train, Labeled_test, Source) -- update the
+paths below (and config.yaml) to match once the Images reorganization is
+finalized.
+
+Current best model: supervisely_run_3class_v4\model\best_model.pth (not yet
+copied into Thesis_AJ)
+
+Images\CD8AA_Cleaned\Train / \Test: the RAW source pool, manually split so
+  Test is never touched by pseudo-labeling. Always point pseudo_label.py's
+  --images-dir at CD8AA_Cleaned\Train, never at Test.
+
+  CD8AA_Cleaned\Test is also, directly, THE definition of the pinned test
+  set (config.yaml's test-source-dir) -- every image in that folder, once
+  labeled and converted, is automatically and permanently held out of
+  training/validation by train_TIRF.py, with NO extra step needed. Growing
+  the test set is just: label more of what's in Test, export, convert.sh,
+  then train as usual -- the next run picks it up by itself. (This replaced
+  the old split.json-carried-forward pinning and add_test_images.py, which
+  no longer exist.)
+
+
+1) CONVERT new/updated Supervisely labels -> training images+masks
+--------------------------------------------------------------------
+bash scripts/convert.sh
+
+  Reads project-dir in config.yaml (currently Images\Labeled\CD8AA), writes to
+  converted-dir (Images\Labeled_converted\{images,masks,preview}).
+  Run this any time you've exported corrected labels from Supervisely.
+
+
+2) TRAIN / fine-tune
+----------------------
+-- Continue from the current best model (RECOMMENDED for adding more labeled
+   images to the existing CD8AA set - what produced the "significant
+   improvement" run):
+
+bash scripts/run_train.sh --continue-from supervisely_run_3class_v4 --out-dir supervisely_run_3class_v5
+
+  --continue-from <run>  starts from that run's checkpoint instead of
+                          fast_model.pth. Does NOT affect which images are
+                          test -- that's always CD8AA_Cleaned\Test (see top
+                          of this file), independent of which run you
+                          continue from.
+  --out-dir <dir>        where the new model/logs/split.json get written -
+                          always bump the version number so old runs aren't
+                          overwritten.
+  --k-folds 5             (default 5) k-fold CV over everything NOT pinned to
+                          test -- trains k models (same starting checkpoint,
+                          different train/val split each fold) and keeps
+                          whichever fold's best epoch had the lowest val
+                          loss. This is why no image stays stuck as "val
+                          forever" across rounds -- every non-test image gets
+                          trained on in most folds. NOTE: this means ~5x the
+                          training time of a single split -- drop it (e.g.
+                          --k-folds 3) for a quicker round if needed.
+
+-- Fresh run from the original FAST checkpoint (only if you deliberately want
+   to restart, e.g. testing a different learning setup from scratch):
+
+bash scripts/run_train.sh --out-dir supervisely_run_3class_fresh
+
+-- Useful extra flags on either form (append after the command above):
+     --epochs 5           quick test run instead of config.yaml's full epoch count
+     --lr 0.0001           override the learning rate
+     --batch-size 4
+
+
+3) QUANTIFY / evaluate a trained run
+---------------------------------------
+bash scripts/quantify.sh --run-dir supervisely_run_3class_v4
+
+  Compares that run's predictions on its held-out TEST images against your
+  manual masks: Dice/precision/recall/F1, object counts, area fractions,
+  figures. Results land in <run-dir>\quantification_test\.
+
+  --subset val            evaluate on validation images instead of test
+  --run-dir ../other_run   point at any other trained run
+
+
+4) PSEUDO-LABEL new, unlabeled images (model-assisted labeling)
+-------------------------------------------------------------------
+bash scripts/pseudo_label.sh --run-dir supervisely_run_3class_v4 --images-dir "Images/CD8AA_Cleaned/Train" --out pseudo_labels --limit 15
+
+  --run-dir <run>          which model to predict with (use the current best)
+  --images-dir <folder...> one or more folders of preprocessed PNGs to scan;
+                            already-labeled images are auto-skipped (matched
+                            by pixel content, not filename)
+  --out <folder>            where the Supervisely-importable project gets
+                            written (inside Thesis_AJ\, e.g. Thesis_AJ\pseudo_labels)
+  --limit 15                only predict a random sample of N new images
+                            (omit to do every new image found)
+  --seed 7                  change this to get a DIFFERENT random batch than
+                            last time (default 42 reproduces the same one)
+
+  Workflow after running: zip the --out folder -> Import into Supervisely as
+  a new dataset in the SAME project -> correct the pre-drawn objects ->
+  export back into Images\Labeled\CD8AA -> go back to step 1 (convert.sh).
+
+
+Typical full cycle for adding a new batch of TRAIN labels
+---------------------------------------------------------
+1. bash scripts/pseudo_label.sh --run-dir supervisely_run_3class_v4 --images-dir "Images/CD8AA_Cleaned/Train" --out pseudo_labels --limit 15
+2. Import Thesis_AJ\pseudo_labels into Supervisely, correct, export back into Images\Labeled\CD8AA
+3. bash scripts/convert.sh
+4. bash scripts/run_train.sh --continue-from supervisely_run_3class_v4 --out-dir supervisely_run_3class_v5
+5. bash scripts/quantify.sh --run-dir supervisely_run_3class_v5
+   (compare its numbers against v4's quantification_test - same pinned test
+   images, so this comparison is apples-to-apples)
+
+Cycle for growing the TEST set instead (from CD8AA_Cleaned\Test)
+------------------------------------------------------------------
+1. Label images in Supervisely (fresh, or pseudo-label + correct -- your call)
+2. Export back into Images\Labeled\CD8AA (same as step 2 above)
+3. bash scripts/convert.sh
+4. bash scripts/run_train.sh --continue-from supervisely_run_3class_v4 --out-dir supervisely_run_3class_v5
+   (no separate "add to test" step needed -- CD8AA_Cleaned\Test IS the test
+   definition, so anything labeled there is automatically pinned the moment
+   it's converted)
+
+Housekeeping: Labeled_converted\ is a fully derived, disposable folder --
+  convert.sh never clears it first, so stale files from an old round can
+  linger (e.g. a filename that only collided across datasets later). If
+  counts look off, wipe Images\Labeled_converted\{images,masks,preview} and
+  rerun convert.sh to regenerate it cleanly.

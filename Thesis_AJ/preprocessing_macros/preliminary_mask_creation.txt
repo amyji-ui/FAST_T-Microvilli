@@ -1,0 +1,165 @@
+// ImageJ Macro to process TIFF files
+// This script processes every TIFF file in the chosen directory as described
+
+
+mainDir = getDirectory("Choose a Directory");
+fileList = getFileList(mainDir);
+
+for (i = 0; i < fileList.length; i++) {
+    filePath = mainDir + fileList[i];
+    if (!endsWith(filePath, ".tif")) continue;
+    setBatchMode(true);
+
+    open(filePath);
+    imageName = replace(fileList[i], ".tif", "");
+
+    // Split channels
+    run("Split Channels");
+    c1 = "C1-" + imageName + ".tif";
+    c2 = "C2-" + imageName + ".tif";
+    c3 = "C3-" + imageName + ".tif";
+    c4 = "C4-" + imageName + ".tif";
+    
+    c2_copy = "C2-" + imageName + "-1.tif";
+    c3_copy = "C3-" + imageName + "-1.tif";
+    c4_copy = "C4-" + imageName + "-1.tif";
+
+    // Process the first image
+    selectWindow(c4);
+    run("Duplicate...", "title=" + c4_copy);
+    setThreshold(178, 65535, "raw");
+    run("Create Mask");
+    run("Fill Holes");
+    setOption("BlackBackground", false);
+    run("Erode");
+    run("Divide...", "value=255");
+    imageCalculator("Multiply create", c1, "mask");
+    selectImage("Result of " + c1);
+    run("Enhance Contrast", "saturated=0.2");
+    run("Apply LUT");
+
+    run("Subtract Background...", "rolling=20");
+    setOption("ScaleConversions", true);
+    run("8-bit");
+    run("Ridge Detection", "line_width=3.5 high_contrast=230 low_contrast=87 method_for_overlap_resolution=NONE sigma=1.51 lower_threshold=3.06 upper_threshold=7.99 minimum_line_length=10 maximum=40");
+
+    // Process the second image
+    selectWindow(c3);
+    run("Duplicate...", "title=" + c3_copy);
+    imageCalculator("Multiply create", c4, "mask");
+    selectImage("Result of " + c4);
+    imageCalculator("Subtract create", "Result of " + c4, c3);
+    //run("Min...", "value=0");
+    run("Enhance Contrast", "saturated=0.35");
+
+    // Process the fourth image
+    selectWindow(c4);
+    imageCalculator("Multiply create", c4, "mask");
+    run("Subtract Background...", "rolling=50");
+    run("Duplicate...", "title=img_for_bs");
+    
+    // Process the third image
+    imageCalculator("Multiply create", c2, "mask");
+    selectImage("mask");
+    close();
+    selectWindow(c3);
+    setAutoThreshold("Otsu dark no-reset");
+    setThreshold(208, 65535, "raw"); // Ensure thresholding
+    run("Create Mask");
+    run("Fill Holes");
+    run("Invert");
+    run("Divide...", "value=255.000");
+    imageCalculator("Multiply create", "Result of " + c2, "mask");
+    imageCalculator("Multiply create", "Result of Result of " + c4, "mask");
+    run("Enhance Contrast", "saturated=0.35");
+    selectImage("Result of Result of Result of " + c4);
+    run("Duplicate...", "title=temp1");
+    run("Duplicate...", "title=temp2");
+    selectImage("Result of Result of " + c2);
+    run("Duplicate...", "title=" + c2_copy);
+    run("Merge Channels...", "c1=[temp1] c2=[Result of Result of " + c2 + "]");
+    run("8-bit");
+    run("Ridge Detection", "line_width=3.5 high_contrast=230 low_contrast=87 make_binary method_for_overlap_resolution=NONE sigma=1.51 lower_threshold=3.06 upper_threshold=7.99");
+    selectImage("RGB Detected segments");
+    run("Invert");
+    selectImage("RGB");
+    close();
+    run("Merge Channels...", "c1=[temp2] c2=[" + c2_copy + "] c3=[RGB Detected segments]");
+    
+    selectImage(c1);
+    close();
+    selectImage(c2);
+    close();
+    selectImage(c3);
+    close();
+    selectImage(c4);
+    close();
+    
+    selectImage(c4_copy);
+    close();
+    selectImage(c3_copy);
+    close();
+
+    selectImage("Result of " + c4);
+    close();
+
+    selectImage("mask");
+    close();
+
+    selectImage("Result of " + c2);
+    close();
+    
+    selectImage("Result of Result of " + c4);
+    close();
+
+    run("RGB Color");
+    run("Images to Stack", "name=Resulting Stack");
+
+    // Save the stack and Close all windows
+    saveAs("Tiff", mainDir + imageName + "_mask.tif");
+    run("Close All");
+
+    filePath = mainDir + imageName + "_mask.tif";
+
+    open(filePath);
+    imageName = imageName + "_mask"; // replace(filePath, ".tif", "");
+
+    // Split channels
+    run("Stack to Images");
+    c1 = imageName + "-0001";
+    c2 = imageName + "-0002";
+    c3 = imageName + "-0003";
+    c4 = imageName + "-0004";
+    
+    c1_copy = imageName + "-0001-1";
+
+    selectImage(c1);
+    run("Flatten");
+    // run("Subtract Background...", "rolling=10");
+    // run("Enhance Contrast", "saturated=0.35");
+    run("Split Channels");
+    
+    selectImage(c2);
+    //run("Subtract Background...", "rolling=30");
+    //run("Enhance Contrast", "saturated=0.35");
+    run("Split Channels");
+    
+    selectImage(c3);
+    run("Split Channels");
+    
+    selectImage(c4);
+    run("Split Channels");
+    
+    run("Merge Channels...", "c1=[" + c4 + " (red)] c2=[" + c2 + " (red)] c3=[" + c4 + " (blue)] c7=[" + c1_copy + " (red)]");
+    
+    // Save the stack and Close all windows
+    selectImage("RGB");
+    saveAs("PNG", mainDir + imageName + ".png");
+    
+    run("Close All");
+    // Delete the intermediate TIFF file
+    if (File.exists(filePath)) {
+        File.delete(filePath);
+    }
+}
+

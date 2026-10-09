@@ -1,0 +1,17 @@
+class,erosion_px,dice,precision,recall
+F-actin,0,0.605,0.52,0.753
+F-actin,1,0.618,0.623,0.633
+F-actin,2,0.538,0.714,0.443
+F-actin,3,0.33,0.766,0.214
+Focal Adhesion,0,0.658,0.69,0.697
+Focal Adhesion,1,0.632,0.756,0.604
+Focal Adhesion,2,0.567,0.806,0.49
+Focal Adhesion,3,0.475,0.841,0.375
+Lamellipodia,0,0.78,0.795,0.779
+Lamellipodia,1,0.759,0.825,0.716
+Lamellipodia,2,0.724,0.846,0.644
+Lamellipodia,3,0.679,0.863,0.57
+microvilli,0,0.662,0.599,0.755
+microvilli,1,0.659,0.698,0.636
+microvilli,2,0.574,0.782,0.461
+microvilli,3,0.394,0.837,0.261
