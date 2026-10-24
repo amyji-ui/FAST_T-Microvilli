@@ -1,25 +1,5 @@
 #!/usr/bin/env python
-"""
-One-off cleanup for a raw TIRF source folder (e.g. Images/Source/TIRF_HEK_CD8AA_Out):
-finds images that are near-duplicate retakes of the same cell (same field of
-view, re-shot seconds apart under different gain/phase settings -- these are
-NOT byte-identical, since the settings change the pixel values, so plain
-hashing can't find them), moves all but one of each duplicate cluster into a
-`Duplicates/` subfolder, then renames the remaining images to a clean
-sequential scheme. A CSV manifest records new name -> original name (and so,
-indirectly, the original acquisition settings/timestamp embedded in it) for
-provenance.
-
-Duplicate detection: a fast downsampled, z-scored correlation screen (robust
-to brightness/gain differences) finds candidate pairs, then full-resolution
-SSIM confirms them -- this is what the quantification pipeline's reviewer
-(see FAST/quantification.py's clDice discussion) verified by eye before this
-script was written.
-
-Usage:
-    python rename_source_images.py <folder> <prefix>
-    python rename_source_images.py ../Images/Source/TIRF_HEK_CD8AA_Out CD8AA
-"""
+"""One-off cleanup of a raw source folder: move near-duplicate retakes aside and rename the rest."""
 
 import argparse
 import csv
@@ -30,13 +10,12 @@ import numpy as np
 from PIL import Image
 from skimage.metrics import structural_similarity as ssim
 
-CORR_CANDIDATE_THRESHOLD = 0.80  # downsampled correlation: cheap first pass
-SSIM_CONFIRM_THRESHOLD = 0.5     # full-res SSIM: confirms it's really the same cell
+CORR_CANDIDATE_THRESHOLD = 0.80
+SSIM_CONFIRM_THRESHOLD = 0.5
 
 
 def find_duplicate_clusters(folder: str, files: list[str]) -> list[list[str]]:
-    """Returns groups of 2+ filenames that are near-duplicate retakes of the
-    same cell. Singletons (no duplicate) are not included."""
+    """Returns groups of 2+ filenames that are near-duplicate retakes of the same cell."""
     small = []
     for f in files:
         im = np.array(Image.open(os.path.join(folder, f)).convert("L").resize((64, 64), Image.BILINEAR), dtype=np.float64)
@@ -114,8 +93,6 @@ def main() -> None:
         new_name = f"{args.prefix}_{i:0{args.digits}d}.png"
         rows.append((new_name, old_name))
 
-    # Two-pass rename (old -> temp -> new) so it's safe even if a new name
-    # happens to collide with a not-yet-renamed old name.
     temp_names = [f".tmp_{i}.png" for i in range(len(rows))]
     for (new_name, old_name), temp_name in zip(rows, temp_names):
         os.rename(os.path.join(args.folder, old_name), os.path.join(args.folder, temp_name))

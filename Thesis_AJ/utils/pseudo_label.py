@@ -1,48 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
-"""
-Run the trained model on currently-unlabeled images and package its
-predictions as a Supervisely-importable project, for model-assisted
-labeling: correct the predictions in Supervisely (usually much faster than
-labeling from scratch) instead of drawing every mask by hand.
-
-This is the reverse of convert_supervisely_annotations.py: instead of
-decoding Supervisely bitmaps into a class-id PNG mask, it encodes a
-predicted class-id mask into Supervisely bitmap objects (one object per
-connected component per class), with nnCreated=true marking them as
-model-generated so they're visually distinguishable from hand-drawn objects
-in the Supervisely editor.
-
-Workflow:
-  1. python pseudo_label.py --config config.yaml --run-dir <trained run> \
-         --images-dir "../Images/TIRF_HEK_CD8AA_Out" --out pseudo_labels
-     (--images-dir accepts more than one folder, and skips any image already
-     present in the training set, so you never re-predict a labeled image.)
-  2. In Supervisely: Import -> "Team files" -> upload the pseudo_labels
-     folder (it's already in Supervisely's on-disk project format:
-     meta.json + <dataset>/img,ann) as a NEW DATASET inside your existing
-     project, so convert_supervisely_annotations.py picks it up alongside
-     the hand-labeled dataset automatically (it globs every dataset under
-     project-dir).
-  3. Open each image and correct the pre-drawn objects: delete wrong ones,
-     draw missed ones, adjust boundaries. This is a correction pass, not
-     labeling from scratch.
-  4. Export the corrected project back into Images/Labeled (overwriting or
-     alongside the existing dataset), then rerun convert.sh and
-     run_train.sh as usual.
-
-Caveats:
-  - The model's F-actin predictions are heavily fragmented (Dice ~0.53,
-    ~2x too many objects vs manual) -- expect real correction work there,
-    not just spot-checks. Lamellipodia (Dice ~0.73) needs less.
-  - Self-training risk: correcting predictions you already half-agree with
-    is faster, but a systematic model mistake is easy to miss. Look
-    especially hard at anything model_confidence-style checks can't catch --
-    F-actin gaps/merges, and periodically re-check against genuinely
-    from-scratch labels.
-  - `classId` values here are placeholders; Supervisely matches classes by
-    title when importing a dataset into an existing project.
-"""
+"""Predict masks for unlabeled images and save them as a Supervisely project for correction."""
 
 import argparse
 import base64
@@ -65,10 +22,7 @@ import torch
 
 
 def bool_mask_to_bitmap(mask: np.ndarray) -> dict:
-    """Encode a full-canvas boolean mask into a Supervisely bitmap dict
-    ({"data": base64 str, "origin": [x, y]}), the inverse of
-    convert_supervisely_annotations.base64_to_bool_mask. Tightly crops to the
-    mask's bounding box first, matching how Supervisely stores bitmaps."""
+    """Encode a boolean mask as a Supervisely bitmap dict."""
     ys, xs = np.where(mask)
     y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
     crop = mask[y0:y1, x0:x1].astype(np.uint8) * 255
@@ -80,14 +34,11 @@ def bool_mask_to_bitmap(mask: np.ndarray) -> dict:
 
 
 def load_real_classes(project_dir: str) -> dict:
-    """Read {project_dir}/meta.json and return {class title: class entry}.
-    Used so pseudo-labels reuse Supervisely's OWN id/color/hotkey for each
-    class -- reusing our internal training-mask index (1, 2, ...) as a fake
-    "classId" is what caused Supervisely to treat pseudo-labeled classes as
-    different from the hand-labeled ones and create "..._1" duplicates,
-    even after the shape field was fixed to match."""
+    """Read {project_dir}/meta.json and return {class title: class entry}."""
     if not project_dir:
         return {}
+    if not isinstance(project_dir, str):
+        project_dir = project_dir[0]
     meta_path = os.path.join(project_dir, "meta.json")
     if not os.path.exists(meta_path):
         return {}
@@ -96,13 +47,7 @@ def load_real_classes(project_dir: str) -> dict:
 
 
 def mask_to_objects(mask: np.ndarray, class_name_to_index: dict, real_classes: dict, min_object_area: int) -> list:
-    """One Supervisely bitmap object per connected component per foreground
-    class (skipping components smaller than min_object_area px), each
-    tagged nnCreated=true. classId is the class's REAL Supervisely id from
-    real_classes when known, so it's recognized as the same class on import
-    (see load_real_classes) -- our internal training-mask index (class_id
-    from class_name_to_index) is only used to read the right pixels out of
-    `mask`, never written to the output."""
+    """Turn a predicted mask into one Supervisely bitmap object per connected component per class."""
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     objects = []
     next_id = 1
@@ -136,17 +81,8 @@ def build_meta(class_name_to_index: dict, colormap: np.ndarray, real_classes: di
     classes = []
     for class_name, class_id in class_name_to_index.items():
         if class_name in real_classes:
-            # Reuse the real class entry verbatim (id, color, shape, hotkey,
-            # description) so Supervisely recognizes it as the SAME class on
-            # import, not a new one under the same title.
             classes.append(real_classes[class_name])
             continue
-        # Fallback for a class name not found in the project (e.g. testing
-        # without --config pointed at the real project, or a genuinely new
-        # class): synthesize an entry. This WILL create a new Supervisely
-        # class rather than merging -- fine for a new class, a problem if
-        # this fires for a class that actually already exists (check
-        # project-dir in --config is correct if you see this warning).
         print(f"  ! '{class_name}' not found in the project's meta.json -- writing a new class definition, not reusing an existing one")
         r, g, b = (int(v) for v in colormap[class_id])
         classes.append({
@@ -174,9 +110,6 @@ def main() -> None:
     args = parser.parse_args()
 
     settings = load_settings(args.config, args.run_dir)
-    # Dedupe by pixel content, not filename: Supervisely renames images on
-    # upload, so an already-labeled image's filename in --images-dir usually
-    # won't match its (different) name in the training set.
     already_labeled_hashes = {
         hashlib.md5(np.array(Image.open(train_TIRF.resolve_image_path(settings["image_dir"], n)).convert("L")).tobytes()).hexdigest()
         for n in train_TIRF.list_dataset_images(settings["image_dir"])

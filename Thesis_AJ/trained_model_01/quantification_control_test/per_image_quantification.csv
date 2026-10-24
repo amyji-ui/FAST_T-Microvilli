@@ -1,0 +1,21 @@
+image,group,split,class,manual_count,predicted_count,count_ratio,manual_fraction,predicted_fraction
+Control_Test/CD8BB_04.png,CD8BB,not in split,F-actin,3,10,3.3333333333333335,0.019042078727942603,0.07417840375586854
+Control_Test/CD8BB_04.png,CD8BB,not in split,Lamellipodia,,,,0.9809579212720574,0.7852112676056338
+Control_Test/CD8BB_04.png,CD8BB,not in split,Focal Adhesion,,,,0.0,0.14061032863849765
+Control_Test/CD8BB_04.png,CD8BB,not in split,microvilli,3,11,3.6666666666666665,0.019042078727942603,0.2147887323943662
+Control_Test/Control_00.png,Control,not in split,F-actin,6,10,1.6666666666666667,0.017777197433218924,0.024143629386886255
+Control_Test/Control_03.png,Control,not in split,F-actin,1,3,3.0,0.005772146945164604,0.03939903996010224
+Control_Test/Control_08.png,Control,not in split,F-actin,5,9,1.8,0.047579393618229306,0.048570705793068554
+Control_Test/Control_11.png,Control,not in split,F-actin,3,6,2.0,0.03842953324759815,0.044374375144197495
+Control_Test/Control_00.png,Control,not in split,Lamellipodia,,,,0.9822228025667811,0.8888328711872951
+Control_Test/Control_03.png,Control,not in split,Lamellipodia,,,,0.9942278530548354,0.9055545165513372
+Control_Test/Control_08.png,Control,not in split,Lamellipodia,,,,0.9524206063817707,0.8759591871152711
+Control_Test/Control_11.png,Control,not in split,Lamellipodia,,,,0.9615704667524019,0.8641851880335307
+Control_Test/Control_00.png,Control,not in split,Focal Adhesion,,,,0.0,0.08702349942581857
+Control_Test/Control_03.png,Control,not in split,Focal Adhesion,,,,0.0,0.05504644348856056
+Control_Test/Control_08.png,Control,not in split,Focal Adhesion,,,,0.0,0.07547010709166034
+Control_Test/Control_11.png,Control,not in split,Focal Adhesion,,,,0.0,0.09144043682227178
+Control_Test/Control_00.png,Control,not in split,microvilli,6,20,3.3333333333333335,0.017777197433218924,0.11116712881270481
+Control_Test/Control_03.png,Control,not in split,microvilli,1,10,10.0,0.005772146945164604,0.0944454834486628
+Control_Test/Control_08.png,Control,not in split,microvilli,5,25,5.0,0.047579393618229306,0.1240408128847289
+Control_Test/Control_11.png,Control,not in split,microvilli,3,12,4.0,0.03842953324759815,0.13581481196646927

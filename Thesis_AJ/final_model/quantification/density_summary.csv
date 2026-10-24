@@ -1,0 +1,6 @@
+group,n_images,manual_density,predicted_density,manual_area_fraction,predicted_area_fraction,manual_cell_px
+Control,32,2.6544,6.2374,0.0865,0.1129,29629.5
+CD8A_GFP,33,9.7103,11.056,0.2978,0.2858,38887.0
+CD8A_ABS,39,13.5823,13.5349,0.3835,0.3354,22785.0
+CD8A_Trunc_GFP,28,10.9831,12.3501,0.3593,0.3195,29798.0
+CD8A_Trunc_ABS,27,12.0548,10.5888,0.3277,0.3305,20073.0

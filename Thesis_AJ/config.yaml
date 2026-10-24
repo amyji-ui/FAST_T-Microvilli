@@ -3,41 +3,36 @@ version: 1.0.0
 schema: v1
 
 # --- Step 1: convert Supervisely labels -> image/mask PNGs (convert.sh) ---
-# project-dir must contain meta.json plus one or more dataset/{img,ann} folders
-# (i.e. the folder you'd point the Supervisely SDK at), NOT a single dataset's
-# img or ann subfolder directly.
-project-dir: F:\Cailab\Cai students\Amy\Thesis_AJ\Images\labeled_Cd8AA
-# converted-dir is created by convert.sh: it mirrors project-dir's own
-# dataset-folder structure, one <converted-dir>\<dataset>\{images,masks,
-# preview} per Supervisely dataset (e.g. Train_0) -- not a single flat pool.
-converted-dir: F:\Cailab\Cai students\Amy\Thesis_AJ\Images\converted_labeled_Cd8AA
+# Supervisely project folder(s) containing meta.json, paired by position with converted-dir; dataset names must be unique across projects.
+project-dir:
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\labeled_Cd8AA            # old batch (Apr 2026)
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\Control_Negative
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\labeled_CD8A_GFP
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\labeled_CD8A_ABS
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\labeled_CD8A_Trunc_GFP
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\labeled_CD8A_Trunc_ABS
+# Output folder(s) written by convert.sh, one <dataset>\{images,masks,preview} per Supervisely dataset.
+converted-dir:
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\converted_labeled_Cd8AA
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\converted_labeled_Control_Negative
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\converted_labeled_CD8A_GFP
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\converted_labeled_CD8A_ABS
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\converted_labeled_CD8A_Trunc_GFP
+  - F:\Cailab\Cai students\Amy\Thesis_AJ\Images\converted_labeled_CD8A_Trunc_ABS
 
-# Supervisely class name -> mask pixel value. Values must be contiguous
-# (1..classes-1) and match train's `classes` count below (0 = background is
-# implicit, don't list it here). Multiple names can map to the same value if
-# ever needed (e.g. a Supervisely-created "..._1" duplicate class) -- both
-# convert_supervisely_annotations.py and quantification.py handle aliases
-# correctly (paint-order priority and display name resolve through the
-# shared index, not the literal name).
+# Supervisely class name -> mask pixel value (background 0 is implicit; "_1" duplicates resolve automatically).
 class-name-to-index:
   F-actin: 1          # microvilli
   Lamellipodia: 2     # cell body
   Focal Adhesion: 3   # bright, intense region in the cell body
 
-# Classes that exist in the Supervisely project but are deliberately left out
-# of training. Their labels are skipped silently (the pixels show whatever
-# class is underneath, otherwise background).
+# Supervisely classes to skip during conversion.
 ignored-classes: []
 
-# When labeled objects overlap, the last class in this list wins (painted on
-# top). Any class not listed here is painted first / can be overwritten.
-# Focal Adhesion is painted last: it's typically a small, specific annotation
-# drawn inside/over a broader F-actin or Lamellipodia region, so it should
-# win the overlap.
+# Overlap priority: the last class listed is painted on top.
 paint-order: [Lamellipodia, F-actin, Focal Adhesion]
 
-# RGB color per mask pixel value, used only for the preview overlay images
-# (and for decoding train predictions back into a viewable image).
+# RGB color per class, used only for preview overlays.
 colormap:
   0: [0, 0, 0]        # Background
   1: [0, 255, 0]      # F-actin (microvilli)
@@ -48,93 +43,48 @@ preview: true
 preview-alpha: 0.4
 
 # --- Step 2: train and test (run_train.sh) ---
-# The pinned test set, defined entirely by this folder: every image there
-# (once labeled and converted) is permanently held out of training/validation,
-# no matter what --continue-from or k-fold does. Add a new test image by
-# dropping it here, labeling it, and running convert.sh -- no extra step
-# needed (this replaced add_test_images.py).
-test-source-dir: F:\Cailab\Cai students\Amy\Thesis_AJ\Images\Source\TIRF_HEK_CD8AA_Out\Test
+# Test set = every Supervisely dataset whose name ends in _Test (e.g. CD8A_GFP_Test).
 
-# Leave unset (or omit) to train from scratch (ImageNet-pretrained encoder
-# only). Point at fast_model.pth to fine-tune the existing FAST checkpoint;
-# layers whose shape doesn't match `classes` below (segmentation_head) are
-# left randomly initialized.
+# Starting checkpoint (omit to train from the ImageNet encoder only).
 pretrained-weights: F:\Cailab\Cai students\Amy\Thesis_AJ\fast_model.pth
 epochs: 50
-out-dir: F:\Cailab\Cai students\Amy\Thesis_AJ\supervisely_run_3class
+out-dir: F:\Cailab\Cai students\Amy\Thesis_AJ\final_model
 batch-size: 2
 classes: 4               # background + F-actin + Lamellipodia + Focal Adhesion
-lr: null                  # null = auto (1e-4 if pretrained-weights set, else 1e-3)
+lr: null                 # null = 1e-4 with pretrained weights, else 1e-3
 seed: 42
+# Folds are stratified by `groups`; check them with `run_train.sh config.yaml --dry-run`.
+k-folds: 5
 
-# clDice (Shit et al., 2021) added to the training loss alongside Dice, so the
-# model is pushed toward getting thin/filamentous structures' connectivity
-# right, not just their pixel overlap -- see quantification.py's clDice
-# metric for the eval-time version of the same idea. Only applied to classes
-# listed in cldice-classes: F-actin is thin/filamentous (the point of
-# clDice); Lamellipodia and Focal Adhesion are blobby/punctate, where a
-# skeleton-based loss doesn't mean much and could just add noise.
-cldice-weight: 0.3        # final loss = (1 - cldice-weight) * dice_loss + cldice-weight * cldice_loss
+# clDice loss (Shit et al., 2021) for connectivity of thin structures, applied to F-actin only.
+cldice-weight: 0.3        # loss = (1 - w) * dice + w * cldice
 cldice-classes: [F-actin]
-cldice-skel-iters: 10     # soft-skeletonization iterations; higher = closer to a true skeleton, slower
+cldice-skel-iters: 10     # soft-skeleton iterations
 
 # --- Step 3: quantification (quantification.py) ---
-# Group of each image, decided from its filename: the first group with a
-# pattern contained in the filename (case-insensitive) wins. Images matching
-# no group are reported as "Unassigned". Order here = order in the plots.
+# Group from the filename: the first group whose pattern is in the name wins (order = plot order).
 groups:
-  CD8AA: [CD8AA]
-  CD8BB: [CD8BB]
   Control: [Control]
+  CD8A_GFP: [CD8A_GFP]
+  CD8A_ABS: [CD8A_ABS]
+  CD8A_Trunc_GFP: [CD8A_Trunc_GFP]
+  CD8A_Trunc_ABS: [CD8A_Trunc_ABS]
+  CD8AA_old: [CD8AA]        # old batch: training only, not for the group comparison
 
-# Classes whose objects are counted (contours) and compared. List only classes
-# where a per-image count is meaningful: the lamellipodia/cell body is one
-# object per image, but its converted mask is split into many islands where
-# F-actin is painted over it, so counting it is misleading. Focal Adhesion is
-# excluded for a similar reason -- individually counting "clogged microvilli"
-# isn't reliable, so it's measured by area fraction only (still always
-# reported, just not counted). merged-classes' microvilli is always counted
-# regardless of this list -- that's the number that actually matters. []
-# = count nothing; omit the key to count every foreground class.
-count-classes: [F-actin]
+# Groups whose microvilli density is compared statistically (all groups are still validated).
+compare-groups: [Control, CD8A_GFP, CD8A_ABS, CD8A_Trunc_GFP, CD8A_Trunc_ABS]
 
-# Minimum contour area (px^2) for an object to be counted, per counted class
-# (and per merged-classes group below, keyed by its own name).
+# Minimum microvilli object area (px^2) to be counted for density.
 count-min-area:
-  F-actin: 0
-  Focal Adhesion: 0
   microvilli: 0
 
-# Derived "merged" pseudo-classes, quantification-only (never used for
-# training or the per-class segmentation Dice/clDice/precision/recall
-# table): the union of the listed real classes' pixels, reported as one
-# additional count+area-fraction row, as if it were its own class. Object
-# counting is done on the UNION mask's connected components, so a Focal
-# Adhesion blob touching an F-actin region counts as ONE microvillus, not
-# two -- they're treated as the same underlying structure, just with a
-# brighter sub-region. Always counted (no need to also list a merged name in
-# count-classes).
+# Union of classes reported as one structure, counted by connected components of the union.
 merged-classes:
   microvilli: [F-actin, Focal Adhesion]
 
-# Per-class confidence thresholds (see predict_mask/sweep_threshold.py): a
-# class here only wins a pixel if its softmax probability ALSO clears its
-# threshold, instead of plain argmax -- the fix for a class whose predicted
-# region is systematically too thick. F-actin=0.7 was found via
-# sweep_threshold.py (peak Dice for both F-actin and microvilli on the test
-# set; higher overshoots -- recall collapses faster than precision gains).
-# Omit a class to leave it at plain argmax. --class-threshold on the command
-# line overrides a single class's value for one run without editing this.
+# A class wins a pixel only if its probability also clears this threshold (tuned with sweep_threshold.py).
 class-thresholds:
-  F-actin: 0.7
 
-# What a pixel demoted by class-thresholds becomes: "next_best" (falls
-# through to the best remaining class) or "background" (forced to
-# Background, no rescue). next_best is what you want when the thresholded
-# class is part of a merged-classes group (see above) -- the demoted pixel
-# usually lands on a sibling member, so the merged count/area stays
-# accurate; background actively discards it instead. Measured on this
-# project's data: next_best gives microvilli Dice 0.666 vs background's
-# 0.660 -- next_best wins since Focal Adhesion (where demoted F-actin
-# pixels usually land) is inside the merged group.
+
+# Where a thresholded-out pixel goes: "next_best" class or "background".
 threshold-fallback: next_best

@@ -1,41 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
-"""
-Convert a Supervisely-exported labeling project into the image/mask PNG pairs
-that FAST/train.py's ConfocalDataset expects.
-
-Supervisely stores each object as a cropped, base64+zlib+PNG-encoded bitmap
-("smart tool" / brush annotations) plus an (x, y) "origin" telling you where
-to paste it back onto the full-size image. This script:
-
-  1. Reads <project>/meta.json to get the list of labeled classes.
-  2. For every image in <project>/<dataset>/img, loads the matching
-     <project>/<dataset>/ann/<image>.json annotation.
-  3. Decodes each object's bitmap and paints it onto a blank (H, W) canvas
-     using an integer class id (background = 0), at the object's origin.
-  4. Saves the canvas as a single-channel "L" mode PNG mask (pixel value ==
-     class id, NOT a color) alongside a copy of the source image.
-  5. Also saves a colorized image+mask overlay to out/preview/, since the
-     raw masks have pixel values 0-3 and look solid black in a normal image
-     viewer - use the preview to actually check the labels/paint order.
-
-Usage (reads project-dir/converted-dir/etc. from config.yaml):
-    python convert_supervisely_annotations.py --config config.yaml
-
-All parameters can also be passed/overridden on the command line, e.g.:
-    python convert_supervisely_annotations.py \
-        --config config.yaml --project "../Images/Labeled" --out "../Images/Labeled_converted"
-
-Output mirrors project-dir's own dataset-folder structure: each Supervisely
-dataset (e.g. <project-dir>/Train_0/{img,ann}) gets its own
-<converted-dir>/Train_0/{images,masks,preview}, instead of one flat pool --
-since datasets never share filenames WITHIN their own img/ folder, no
-cross-dataset collision handling is needed; each dataset's output is just
-its own namespace. train_TIRF.py/quantification.py read directly from
-<converted-dir> (not <converted-dir>/images) and gather images across every
-dataset subfolder. Pass --no-preview to skip generating each dataset's
-preview/.
-"""
+"""Convert Supervisely projects into per-dataset image/mask PNG pairs for training."""
 
 import argparse
 import base64
@@ -50,10 +14,6 @@ import cv2
 import numpy as np
 import yaml
 from PIL import Image
-
-# The class setup (class-name-to-index, paint-order, colormap, ignored-classes)
-# is defined only in config.yaml -- nothing class-specific is hardcoded here,
-# so changing the classes is a config-only edit.
 
 
 def colormap_dict_to_array(colormap: dict) -> np.ndarray:
@@ -73,7 +33,6 @@ def base64_to_bool_mask(data: str) -> np.ndarray:
     if decoded is None:
         raise ValueError("Failed to decode bitmap PNG data")
     if decoded.ndim == 3 and decoded.shape[2] >= 4:
-        # Use the alpha channel as the mask.
         return decoded[:, :, 3] > 0
     if decoded.ndim == 2:
         return decoded > 0
@@ -81,15 +40,7 @@ def base64_to_bool_mask(data: str) -> np.ndarray:
 
 
 def resolve_class_name(name: str, known_names: set) -> str:
-    """Map a Supervisely class title to one already known to this project
-    (class-name-to-index or ignored-classes). Handles the "<name>_<digits>"
-    duplicate classes Supervisely can create when importing/merging a
-    dataset whose class definition doesn't exactly match an existing
-    project class (see pseudo_label.py) -- e.g. "F-actin_1" resolves to
-    "F-actin" -- so a fresh duplicate doesn't need a manually-added config
-    entry every time, and doesn't need Supervisely's own merge to work
-    perfectly. Returns `name` unchanged if nothing matches (caller's
-    existing "unknown class" handling then applies)."""
+    """Map a Supervisely class title to one already known to this project (class-name-to-index or ignored-classes)."""
     if name in known_names:
         return name
     stripped = re.sub(r"_\d+$", "", name)
@@ -110,12 +61,6 @@ def build_mask(ann: dict, class_name_to_index: dict, paint_order: list, ignored_
             print(f"  (treating '{raw_name}' as '{class_name}')")
         objects_by_class.setdefault(class_name, []).append(obj)
 
-    # Paint in a fixed order so overlaps resolve consistently; any class not
-    # listed in paint_order is painted first (i.e. can be overwritten).
-    # Priority is keyed by resolved class INDEX, not the literal class name
-    # string, so an alias name (e.g. "F-actin_1" mapping to the same index as
-    # "F-actin" in class_name_to_index) gets the same paint priority as its
-    # canonical class without needing its own separate paint_order entry.
     index_priority = {
         class_name_to_index[name]: position for position, name in enumerate(paint_order) if name in class_name_to_index
     }
@@ -136,7 +81,7 @@ def build_mask(ann: dict, class_name_to_index: dict, paint_order: list, ignored_
                 continue
             bitmap = obj["bitmap"]
             mask = base64_to_bool_mask(bitmap["data"])
-            ox, oy = bitmap["origin"]  # [x, y]
+            ox, oy = bitmap["origin"]
             h, w = mask.shape
             canvas[oy : oy + h, ox : ox + w][mask] = class_idx
 
@@ -164,10 +109,13 @@ def main():
         with open(args.config, "r") as f:
             config = yaml.safe_load(f) or {}
 
-    project_dir = args.project or config.get("project-dir")
-    out_dir = args.out or config.get("converted-dir")
-    if not project_dir or not out_dir:
+    project_dirs = as_list(args.project or config.get("project-dir"))
+    out_dirs = as_list(args.out or config.get("converted-dir"))
+    if not project_dirs or not out_dirs:
         parser.error("project dir and output dir are required: set project-dir/converted-dir in --config, or pass --project/--out")
+    if len(project_dirs) != len(out_dirs):
+        parser.error(f"project-dir lists {len(project_dirs)} folder(s) but converted-dir lists {len(out_dirs)} -- "
+                     "they're paired by position (project i -> converted-dir i), so give the same number of each")
 
     class_name_to_index = config.get("class-name-to-index")
     paint_order = config.get("paint-order")
@@ -179,11 +127,28 @@ def main():
     preview_alpha = args.preview_alpha if args.preview_alpha is not None else config.get("preview-alpha", 0.4)
     colormap = colormap_dict_to_array(colormap_dict)
 
+    for project_dir, out_dir in zip(project_dirs, out_dirs):
+        print(f"\n=== {project_dir} -> {out_dir} ===")
+        convert_project(project_dir, out_dir, class_name_to_index, paint_order, ignored_classes,
+                        preview_enabled, preview_alpha, colormap)
+
+
+def as_list(value) -> list:
+    """None -> [], a single path -> [path], a list -> itself."""
+    if value is None:
+        return []
+    return [value] if isinstance(value, str) else list(value)
+
+
+def convert_project(project_dir, out_dir, class_name_to_index, paint_order, ignored_classes,
+                    preview_enabled, preview_alpha, colormap) -> None:
+    """Convert one Supervisely project into out_dir/<dataset>/{images,masks,preview}."""
     meta_path = os.path.join(project_dir, "meta.json")
     with open(meta_path, "r") as f:
         meta = json.load(f)
     known_classes = {c["title"] for c in meta["classes"]}
-    unmapped = known_classes - set(class_name_to_index) - set(ignored_classes)
+    known_names = set(class_name_to_index) | set(ignored_classes)
+    unmapped = {c for c in known_classes if resolve_class_name(c, known_names) not in known_names}
     if unmapped:
         print(f"Warning: classes in meta.json with no class-name-to-index entry: {unmapped}")
 
@@ -208,17 +173,11 @@ def main():
         print(f"Converting {dataset_name}/{img_name} ...")
         mask = build_mask(ann, class_name_to_index, paint_order, ignored_classes)
 
-        # Sanity check mask/image size agree.
         with Image.open(img_path) as im:
             if im.size != (mask.shape[1], mask.shape[0]):
                 print(f"  ! WARNING: image size {im.size} != annotation size {(mask.shape[1], mask.shape[0])}")
             img_rgb = np.array(im.convert("RGB"))
 
-        # Per-dataset output (mirrors project-dir's own dataset folders):
-        # <out_dir>/<dataset_name>/{images,masks,preview}. Filenames are only
-        # ever compared WITHIN one dataset's own img/ folder (where
-        # Supervisely already guarantees uniqueness), so no cross-dataset
-        # collision handling is needed here.
         images_out = os.path.join(out_dir, dataset_name, "images")
         masks_out = os.path.join(out_dir, dataset_name, "masks")
         os.makedirs(images_out, exist_ok=True)

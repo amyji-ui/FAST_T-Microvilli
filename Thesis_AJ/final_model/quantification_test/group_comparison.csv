@@ -1,0 +1,193 @@
+class,metric,comparison,test,n_a,n_b,statistic,p_value
+F-actin,manual_count,all groups,Kruskal-Wallis,49,,17.729742316957424,0.003304898460673546
+F-actin,manual_count,Control vs CD8A_GFP,Mann-Whitney U,6,7,0.0,0.003361339474765026
+F-actin,manual_count,Control vs CD8A_ABS,Mann-Whitney U,6,8,2.0,0.005355512963132387
+F-actin,manual_count,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.013921913328143975
+F-actin,manual_count,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.013921913328143975
+F-actin,manual_count,Control vs CD8AA_old,Mann-Whitney U,6,20,0.0,0.00029060592375460584
+F-actin,manual_count,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,33.5,0.5624846616632901
+F-actin,manual_count,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,8.5,0.34360511964077955
+F-actin,manual_count,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,19.5,0.34360511964077955
+F-actin,manual_count,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,87.5,0.34647727529024763
+F-actin,manual_count,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,8.5,0.23366346495668922
+F-actin,manual_count,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,17.5,0.8649006171360114
+F-actin,manual_count,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,74.0,0.7794714552375914
+F-actin,manual_count,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,14.0,0.11428571428571428
+F-actin,manual_count,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,58.0,0.1744929397984598
+F-actin,manual_count,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,40.0,1.0
+F-actin,predicted_count,all groups,Kruskal-Wallis,49,,20.158338809304766,0.0011670432398037626
+F-actin,predicted_count,Control vs CD8A_GFP,Mann-Whitney U,6,7,0.0,0.003361339474765026
+F-actin,predicted_count,Control vs CD8A_ABS,Mann-Whitney U,6,8,0.0,0.0023616468016921755
+F-actin,predicted_count,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.013921913328143975
+F-actin,predicted_count,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.013921913328143975
+F-actin,predicted_count,Control vs CD8AA_old,Mann-Whitney U,6,20,0.0,0.00028437977869075117
+F-actin,predicted_count,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,41.0,0.14764858880647386
+F-actin,predicted_count,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,15.0,0.9272727272727272
+F-actin,predicted_count,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,24.0,0.07272727272727272
+F-actin,predicted_count,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,76.0,0.7604691967774356
+F-actin,predicted_count,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,12.5,0.6091300700836288
+F-actin,predicted_count,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,21.5,0.394107148810076
+F-actin,predicted_count,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,56.0,0.2307084336174129
+F-actin,predicted_count,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,13.5,0.14648918393520854
+F-actin,predicted_count,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,38.5,0.9380424274353043
+F-actin,predicted_count,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,14.0,0.047562052575353196
+F-actin,manual_fraction,all groups,Kruskal-Wallis,49,,25.050403446239944,0.00013624583800435743
+F-actin,manual_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,0.0,0.003361339474765026
+F-actin,manual_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,0.0,0.0023880570242425293
+F-actin,manual_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.013921913328143975
+F-actin,manual_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.013921913328143975
+F-actin,manual_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,0.0,0.00029270302567633287
+F-actin,manual_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,10.0,0.04009324009324009
+F-actin,manual_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,17.0,0.6484848484848484
+F-actin,manual_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,25.0,0.04242424242424242
+F-actin,manual_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,51.0,0.31380020945238335
+F-actin,manual_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,28.0,0.04848484848484849
+F-actin,manual_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,30.0,0.01616161616161616
+F-actin,manual_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,107.0,0.1816051903008425
+F-actin,manual_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,13.0,0.2
+F-actin,manual_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,26.0,0.3090532655750047
+F-actin,manual_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,6.0,0.005081874647092038
+F-actin,predicted_fraction,all groups,Kruskal-Wallis,49,,30.823276967930013,1.0150682484770107e-05
+F-actin,predicted_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,0.0,0.0011655011655011655
+F-actin,predicted_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,0.0,0.000666000666000666
+F-actin,predicted_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.009523809523809525
+F-actin,predicted_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.009523809523809525
+F-actin,predicted_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,0.0,8.686965208704338e-06
+F-actin,predicted_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,13.0,0.09386169386169387
+F-actin,predicted_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,20.0,0.3151515151515151
+F-actin,predicted_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,25.0,0.04242424242424242
+F-actin,predicted_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,16.0,0.0016395842482799005
+F-actin,predicted_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,26.0,0.1090909090909091
+F-actin,predicted_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,30.0,0.01616161616161616
+F-actin,predicted_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,83.0,0.9009483270352836
+F-actin,predicted_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,12.0,0.34285714285714286
+F-actin,predicted_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,4.0,0.002258610954263128
+F-actin,predicted_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,1.0,0.0003764351590438547
+Lamellipodia,manual_fraction,all groups,Kruskal-Wallis,49,,21.76266472303206,0.0005808749289547649
+Lamellipodia,manual_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,42.0,0.0011655011655011655
+Lamellipodia,manual_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,48.0,0.000666000666000666
+Lamellipodia,manual_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,24.0,0.009523809523809525
+Lamellipodia,manual_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,24.0,0.009523809523809525
+Lamellipodia,manual_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,120.0,8.686965208704338e-06
+Lamellipodia,manual_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,51.0,0.005905205905205905
+Lamellipodia,manual_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,19.0,0.4121212121212121
+Lamellipodia,manual_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,14.0,1.0
+Lamellipodia,manual_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,87.0,0.36977129151042193
+Lamellipodia,manual_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,5.0,0.07272727272727274
+Lamellipodia,manual_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,4.0,0.04848484848484849
+Lamellipodia,manual_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,45.0,0.07916334872856612
+Lamellipodia,manual_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,5.0,0.4857142857142857
+Lamellipodia,manual_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,38.0,0.9109730848861284
+Lamellipodia,manual_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,51.0,0.4312064746847355
+Lamellipodia,predicted_fraction,all groups,Kruskal-Wallis,49,,27.11800583090377,5.41019550722446e-05
+Lamellipodia,predicted_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,42.0,0.0011655011655011655
+Lamellipodia,predicted_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,48.0,0.000666000666000666
+Lamellipodia,predicted_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,24.0,0.009523809523809525
+Lamellipodia,predicted_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,24.0,0.009523809523809525
+Lamellipodia,predicted_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,120.0,8.686965208704338e-06
+Lamellipodia,predicted_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,45.0,0.054079254079254076
+Lamellipodia,predicted_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,15.0,0.9272727272727272
+Lamellipodia,predicted_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,8.0,0.3151515151515151
+Lamellipodia,predicted_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,113.0,0.016033242120198642
+Lamellipodia,predicted_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,7.0,0.15353535353535355
+Lamellipodia,predicted_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,1.0,0.00808080808080808
+Lamellipodia,predicted_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,79.0,0.9801387018778324
+Lamellipodia,predicted_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,2.0,0.11428571428571428
+Lamellipodia,predicted_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,64.0,0.0675701110483719
+Lamellipodia,predicted_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,77.0,0.0013175230566534915
+Focal Adhesion,manual_fraction,all groups,Kruskal-Wallis,49,,14.82009739597,0.011159338029450967
+Focal Adhesion,manual_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,10.0,0.13308040166544383
+Focal Adhesion,manual_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,3.0,0.00806224938429328
+Focal Adhesion,manual_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.013921913328143975
+Focal Adhesion,manual_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.013921913328143975
+Focal Adhesion,manual_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,24.0,0.03062280480490773
+Focal Adhesion,manual_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,23.0,0.6125874125874127
+Focal Adhesion,manual_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,6.0,0.16363636363636364
+Focal Adhesion,manual_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,7.0,0.2303030303030303
+Focal Adhesion,manual_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,75.0,0.8078600948166165
+Focal Adhesion,manual_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,10.0,0.3676767676767677
+Focal Adhesion,manual_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,10.0,0.3676767676767677
+Focal Adhesion,manual_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,108.0,0.16525181742573047
+Focal Adhesion,manual_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,9.0,0.8857142857142857
+Focal Adhesion,manual_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,67.0,0.036514210427253904
+Focal Adhesion,manual_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,63.0,0.08112177677395067
+Focal Adhesion,predicted_fraction,all groups,Kruskal-Wallis,49,,3.7166588921282653,0.5908868341607904
+Focal Adhesion,predicted_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,22.0,0.9452214452214451
+Focal Adhesion,predicted_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,19.0,0.5727605727605728
+Focal Adhesion,predicted_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,4.0,0.11428571428571428
+Focal Adhesion,predicted_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,6.0,0.2571428571428571
+Focal Adhesion,predicted_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,54.0,0.7444729183859617
+Focal Adhesion,predicted_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,23.0,0.6125874125874127
+Focal Adhesion,predicted_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,7.0,0.2303030303030303
+Focal Adhesion,predicted_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,10.0,0.5272727272727272
+Focal Adhesion,predicted_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,65.0,0.8078600948166165
+Focal Adhesion,predicted_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,11.0,0.46060606060606063
+Focal Adhesion,predicted_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,13.0,0.6828282828282828
+Focal Adhesion,predicted_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,89.0,0.6718260805217328
+Focal Adhesion,predicted_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,10.0,0.6857142857142857
+Focal Adhesion,predicted_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,57.0,0.2100508187464709
+Focal Adhesion,predicted_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,54.0,0.3090532655750047
+microvilli,manual_count,all groups,Kruskal-Wallis,49,,22.422314580807267,0.00043513081694253363
+microvilli,manual_count,Control vs CD8A_GFP,Mann-Whitney U,6,7,1.0,0.005215730911143768
+microvilli,manual_count,Control vs CD8A_ABS,Mann-Whitney U,6,8,7.0,0.0327742484527723
+microvilli,manual_count,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.013632489904161065
+microvilli,manual_count,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.5,0.017941503442798507
+microvilli,manual_count,Control vs CD8AA_old,Mann-Whitney U,6,20,6.5,0.001235950718605704
+microvilli,manual_count,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,43.0,0.09041070624659679
+microvilli,manual_count,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,4.0,0.0713022085219609
+microvilli,manual_count,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,23.0,0.1041795770708849
+microvilli,manual_count,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,103.0,0.07171523803855909
+microvilli,manual_count,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,1.0,0.013460068543114392
+microvilli,manual_count,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,15.5,1.0
+microvilli,manual_count,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,69.0,0.5928523529316216
+microvilli,manual_count,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,16.0,0.028429535998796527
+microvilli,manual_count,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,77.0,0.004596025981848332
+microvilli,manual_count,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,44.0,0.7857156165274569
+microvilli,predicted_count,all groups,Kruskal-Wallis,49,,19.99921616138025,0.001250153901742605
+microvilli,predicted_count,Control vs CD8A_GFP,Mann-Whitney U,6,7,3.0,0.012299213011710101
+microvilli,predicted_count,Control vs CD8A_ABS,Mann-Whitney U,6,8,5.0,0.016563674249993204
+microvilli,predicted_count,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.013921913328143975
+microvilli,predicted_count,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.013921913328143975
+microvilli,predicted_count,Control vs CD8AA_old,Mann-Whitney U,6,20,3.5,0.0006335626683528089
+microvilli,predicted_count,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,45.5,0.04893854964336552
+microvilli,predicted_count,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,15.0,0.9272727272727272
+microvilli,predicted_count,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,23.0,0.10909090909090909
+microvilli,predicted_count,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,100.0,0.10185310626352623
+microvilli,predicted_count,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,2.0,0.01616161616161616
+microvilli,predicted_count,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,14.5,0.8649006171360114
+microvilli,predicted_count,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,54.5,0.20254404075036325
+microvilli,predicted_count,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,15.5,0.042066412206780826
+microvilli,predicted_count,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,57.0,0.1999437407420238
+microvilli,predicted_count,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,29.0,0.4147090259621704
+microvilli,manual_fraction,all groups,Kruskal-Wallis,49,,21.76266472303206,0.0005808749289547649
+microvilli,manual_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,0.0,0.0011655011655011655
+microvilli,manual_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,0.0,0.000666000666000666
+microvilli,manual_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.009523809523809525
+microvilli,manual_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.009523809523809525
+microvilli,manual_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,0.0,8.686965208704338e-06
+microvilli,manual_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,5.0,0.005905205905205905
+microvilli,manual_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,9.0,0.4121212121212121
+microvilli,manual_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,14.0,1.0
+microvilli,manual_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,53.0,0.36977129151042193
+microvilli,manual_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,27.0,0.07272727272727274
+microvilli,manual_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,28.0,0.04848484848484849
+microvilli,manual_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,115.0,0.07916334872856612
+microvilli,manual_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,11.0,0.4857142857142857
+microvilli,manual_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,42.0,0.9109730848861284
+microvilli,manual_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,29.0,0.4312064746847355
+microvilli,predicted_fraction,all groups,Kruskal-Wallis,49,,27.118005830903797,5.410195507224387e-05
+microvilli,predicted_fraction,Control vs CD8A_GFP,Mann-Whitney U,6,7,0.0,0.0011655011655011655
+microvilli,predicted_fraction,Control vs CD8A_ABS,Mann-Whitney U,6,8,0.0,0.000666000666000666
+microvilli,predicted_fraction,Control vs CD8A_Trunc_GFP,Mann-Whitney U,6,4,0.0,0.009523809523809525
+microvilli,predicted_fraction,Control vs CD8A_Trunc_ABS,Mann-Whitney U,6,4,0.0,0.009523809523809525
+microvilli,predicted_fraction,Control vs CD8AA_old,Mann-Whitney U,6,20,0.0,8.686965208704338e-06
+microvilli,predicted_fraction,CD8A_GFP vs CD8A_ABS,Mann-Whitney U,7,8,11.0,0.054079254079254076
+microvilli,predicted_fraction,CD8A_GFP vs CD8A_Trunc_GFP,Mann-Whitney U,7,4,13.0,0.9272727272727272
+microvilli,predicted_fraction,CD8A_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,7,4,20.0,0.3151515151515151
+microvilli,predicted_fraction,CD8A_GFP vs CD8AA_old,Mann-Whitney U,7,20,27.0,0.016033242120198642
+microvilli,predicted_fraction,CD8A_ABS vs CD8A_Trunc_GFP,Mann-Whitney U,8,4,25.0,0.15353535353535355
+microvilli,predicted_fraction,CD8A_ABS vs CD8A_Trunc_ABS,Mann-Whitney U,8,4,31.0,0.00808080808080808
+microvilli,predicted_fraction,CD8A_ABS vs CD8AA_old,Mann-Whitney U,8,20,81.0,0.9801387018778324
+microvilli,predicted_fraction,CD8A_Trunc_GFP vs CD8A_Trunc_ABS,Mann-Whitney U,4,4,14.0,0.11428571428571428
+microvilli,predicted_fraction,CD8A_Trunc_GFP vs CD8AA_old,Mann-Whitney U,4,20,16.0,0.0675701110483719
+microvilli,predicted_fraction,CD8A_Trunc_ABS vs CD8AA_old,Mann-Whitney U,4,20,3.0,0.0013175230566534915

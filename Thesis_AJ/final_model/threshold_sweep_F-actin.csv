@@ -1,0 +1,13 @@
+class,threshold,dice,precision,recall
+F-actin,0.0,0.649,0.609,0.742
+F-actin,0.4,0.649,0.611,0.74
+F-actin,0.5,0.65,0.616,0.734
+F-actin,0.6,0.643,0.638,0.697
+F-actin,0.7,0.636,0.657,0.664
+F-actin,0.8,0.61,0.688,0.6
+microvilli,0.0,0.683,0.647,0.774
+microvilli,0.4,0.683,0.648,0.773
+microvilli,0.5,0.683,0.65,0.769
+microvilli,0.6,0.681,0.664,0.749
+microvilli,0.7,0.679,0.674,0.731
+microvilli,0.8,0.667,0.69,0.694
