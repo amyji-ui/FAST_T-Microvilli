@@ -1,0 +1,5 @@
+﻿Class,n images,Dice,clDice,Precision,Recall,F1
+F-actin,49,0.65 ± 0.16,0.77 ± 0.12,0.61 ± 0.18,0.74 ± 0.15,0.65 ± 0.16
+Cell body (lamellipodia),49,0.80 ± 0.08,–,0.79 ± 0.11,0.83 ± 0.08,0.80 ± 0.08
+Focal adhesion,49,0.67 ± 0.20,–,0.65 ± 0.22,0.75 ± 0.14,0.67 ± 0.20
+Microvilli (F-actin + focal adhesion),49,0.68 ± 0.16,0.79 ± 0.12,0.65 ± 0.19,0.77 ± 0.10,0.68 ± 0.16

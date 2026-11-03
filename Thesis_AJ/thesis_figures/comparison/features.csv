@@ -1,0 +1,23 @@
+﻿Feature,Definition,Unit,Control,CD8A GFP,Trunc CD8A GFP,CD8A Ab,Trunc CD8A Ab,CD8AA (earlier batch),Manual vs model CCC,Note
+cell_area_px,"Cell footprint area (all labeled classes, holes filled)",px,"32,725 [24,260–45,833]","39,118 [29,140–46,337]","31,521 [23,748–37,561]","25,404 [17,522–30,897]","20,866 [18,501–26,138]","24,846 [16,524–31,973]",0.92,
+cell_perimeter_px,Perimeter of the largest connected footprint,px,"1,438 [993–1,680]","2,033 [1,501–2,654]","1,770 [1,160–2,168]","1,549 [1,200–1,931]","1,245 [856–1,425]","1,607 [1,277–2,188]",0.76,
+cell_circularity,4π·area / perimeter² of the largest footprint (1 = circle),–,0.21 [0.17–0.28],0.10 [0.08–0.15],0.13 [0.10–0.18],0.13 [0.09–0.16],0.22 [0.13–0.25],0.10 [0.07–0.13],0.64,Sensitive to protrusions on the outline
+cell_solidity,Footprint area / convex hull area of the largest footprint,–,0.63 [0.60–0.70],0.57 [0.49–0.66],0.57 [0.51–0.65],0.63 [0.55–0.68],0.62 [0.56–0.72],0.54 [0.48–0.60],0.72,
+cell_aspect_ratio,Major / minor axis of the ellipse fitted to the largest footprint,–,1.87 [1.42–2.06],1.65 [1.30–2.03],1.74 [1.51–2.15],1.65 [1.46–2.21],2.20 [1.60–2.95],2.02 [1.56–2.46],0.80,
+body_area_px,Cell body (lamellipodia) area,px,"28,399 [19,706–41,222]","26,856 [19,558–34,496]","21,054 [15,906–24,495]","14,049 [9,732–20,472]","14,219 [11,472–17,312]","14,136 [8,387–18,967]",0.92,
+body_fraction,Cell body area / cell area,–,0.88 [0.83–0.90],0.71 [0.62–0.74],0.68 [0.60–0.71],0.64 [0.55–0.68],0.67 [0.60–0.77],0.58 [0.51–0.62],0.84,
+factin_area_px,F-actin area,px,"732 [324–1,112]","6,357 [4,300–7,609]","4,790 [3,637–7,084]","4,667 [2,904–7,030]","2,279 [1,393–3,046]","6,710 [4,940–8,777]",0.87,
+factin_fraction,F-actin area / cell area,–,0.02 [0.01–0.04],0.15 [0.12–0.21],0.18 [0.14–0.21],0.17 [0.13–0.24],0.12 [0.08–0.15],0.28 [0.22–0.34],0.89,
+factin_count,Number of separate F-actin objects,objects,8 [3–12],31 [25–41],30 [20–36],25 [18–30],16 [11–22],34 [23–44],0.73,Unreliable: over-counts when a protrusion is predicted in pieces
+factin_length_px,Total F-actin skeleton length,px,92 [36–132],781 [493–916],546 [431–830],569 [354–878],256 [161–351],"877 [656–1,130]",0.87,
+fa_area_px,Focal adhesion area,px,"3,311 [2,783–4,176]","4,521 [3,381–6,032]","4,726 [3,894–6,112]","3,986 [2,474–5,214]","3,495 [2,488–4,730]","2,982 [2,230–4,040]",0.74,
+fa_fraction,Focal adhesion area / cell area,–,0.09 [0.07–0.13],0.13 [0.09–0.16],0.15 [0.11–0.19],0.15 [0.13–0.18],0.16 [0.12–0.23],0.12 [0.11–0.16],0.65,
+fa_count,Number of separate focal adhesion objects,objects,13 [11–18],16 [10–20],14 [9–18],9 [6–16],10 [8–13],10 [5–14],0.54,Unreliable: aggregated microvilli are hard to separate
+microvilli_area_px,Microvilli (F-actin + focal adhesion) area,px,"4,146 [3,400–4,993]","10,843 [9,026–12,695]","10,054 [7,192–12,837]","9,057 [6,359–11,177]","6,408 [4,566–7,716]","10,171 [7,491–12,512]",0.86,
+microvilli_fraction,Microvilli area / cell area (= F-actin fraction + focal adhesion fraction),–,0.11 [0.09–0.17],0.29 [0.25–0.36],0.32 [0.26–0.38],0.34 [0.31–0.41],0.33 [0.23–0.38],0.40 [0.35–0.47],0.85,Primary microvilli measure
+microvilli_count,Number of microvilli (connected objects of the union),objects,20 [16–28],44 [35–54],42 [28–48],32 [21–39],22 [17–31],40 [25–50],0.71,"Unreliable: touching microvilli merge, split predictions inflate it"
+microvilli_density,"Microvilli count per 10,000 px of cell area","per 10,000 px",6.2 [5.1–8.1],11.1 [9.5–13.4],12.4 [10.3–13.6],13.5 [10.5–15.1],10.6 [8.6–12.7],15.0 [12.8–18.2],0.65,Unreliable: inherits the count errors; use microvilli fraction
+microvilli_length_px,Total microvilli skeleton length,px,380 [306–457],"1,239 [973–1,537]","1,190 [795–1,507]","1,008 [662–1,255]",703 [478–769],"1,248 [879–1,564]",0.85,
+microvilli_mean_length_px,Mean skeleton length per microvillus,px,18.9 [15.7–23.9],28.9 [24.9–33.1],29.8 [25.3–34.9],30.3 [22.8–37.2],30.2 [22.5–34.9],31.7 [28.3–37.5],0.19,Unreliable: depends on the count
+microvilli_mean_width_px,Microvilli area / skeleton length,px,9.9 [9.2–11.4],8.6 [8.3–9.0],8.6 [8.5–9.3],8.9 [8.4–9.6],9.6 [8.8–10.3],8.2 [7.9–8.7],0.27,
+fa_share_of_microvilli,Focal adhesion area / microvilli area (degree of aggregation),–,0.84 [0.76–0.90],0.46 [0.35–0.50],0.48 [0.41–0.56],0.47 [0.34–0.58],0.63 [0.53–0.69],0.32 [0.26–0.39],0.80,

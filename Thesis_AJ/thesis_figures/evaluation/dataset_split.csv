@@ -1,0 +1,8 @@
+﻿Group,Training (train + validation),Test (held out),Total
+Control,26,6,32
+CD8A GFP,26,7,33
+CD8A Ab,31,8,39
+Trunc CD8A GFP,24,4,28
+Trunc CD8A Ab,23,4,27
+CD8AA (earlier batch),56,20,76
+Total,186,49,235

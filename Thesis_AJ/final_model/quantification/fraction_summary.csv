@@ -1,0 +1,7 @@
+group,n_images,manual_fraction,predicted_fraction,manual_cell_px,predicted_cell_px
+Control,32,0.0865,0.1129,29629.5,32725.0
+CD8A_GFP,33,0.2978,0.2858,38887.0,39118.0
+CD8A_ABS,39,0.3835,0.3354,22785.0,25404.0
+CD8A_Trunc_GFP,28,0.3593,0.3195,29798.0,31521.0
+CD8A_Trunc_ABS,27,0.3277,0.3305,20073.0,20866.0
+CD8AA_old,76,0.3772,0.4032,19413.0,24846.5

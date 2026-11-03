@@ -1,0 +1,17 @@
+source,family,comparison,group_a,group_b,n_a,n_b,median_a,median_b,median_diff,ci_low,ci_high,cliffs_delta,p_value,p_holm
+Manual,CD8A vs Control,CD8A GFP vs Control,Control,CD8A GFP,32,33,0.018,0.1515,0.1335,0.1008,0.1567,0.9716,0.0,0.0
+Manual,CD8A vs Control,Trunc CD8A GFP vs Control,Control,Trunc CD8A GFP,32,28,0.018,0.1715,0.1536,0.1264,0.1794,1.0,0.0,0.0
+Manual,CD8A vs Control,CD8A Ab vs Control,Control,CD8A Ab,32,39,0.018,0.2243,0.2063,0.1841,0.2302,0.9824,0.0,0.0
+Manual,CD8A vs Control,Trunc CD8A Ab vs Control,Control,Trunc CD8A Ab,32,27,0.018,0.1302,0.1122,0.0822,0.1331,0.9398,0.0,0.0
+Manual,Truncation (Trunc - Full),Trunc CD8A GFP vs CD8A GFP,CD8A GFP,Trunc CD8A GFP,33,28,0.1515,0.1715,0.0201,-0.0165,0.0625,0.2208,0.1418,0.1418
+Manual,Truncation (Trunc - Full),Trunc CD8A Ab vs CD8A Ab,CD8A Ab,Trunc CD8A Ab,39,27,0.2243,0.1302,-0.0941,-0.1277,-0.0602,-0.548,0.0002,0.0007
+Manual,Detection (Ab - GFP),CD8A Ab vs CD8A GFP,CD8A GFP,CD8A Ab,33,39,0.1515,0.2243,0.0728,0.0417,0.1106,0.5152,0.0002,0.0007
+Manual,Detection (Ab - GFP),Trunc CD8A Ab vs Trunc CD8A GFP,Trunc CD8A GFP,Trunc CD8A Ab,28,27,0.1715,0.1302,-0.0414,-0.0799,-0.009,-0.3492,0.0268,0.0537
+Model,CD8A vs Control,CD8A GFP vs Control,Control,CD8A GFP,32,33,0.0211,0.1526,0.1316,0.1098,0.1865,0.9602,0.0,0.0
+Model,CD8A vs Control,Trunc CD8A GFP vs Control,Control,Trunc CD8A GFP,32,28,0.0211,0.1767,0.1556,0.1214,0.1745,0.9844,0.0,0.0
+Model,CD8A vs Control,CD8A Ab vs Control,Control,CD8A Ab,32,39,0.0211,0.1747,0.1537,0.1332,0.1915,0.9728,0.0,0.0
+Model,CD8A vs Control,Trunc CD8A Ab vs Control,Control,Trunc CD8A Ab,32,27,0.0211,0.1165,0.0955,0.0626,0.1262,0.9097,0.0,0.0
+Model,Truncation (Trunc - Full),Trunc CD8A GFP vs CD8A GFP,CD8A GFP,Trunc CD8A GFP,33,28,0.1526,0.1767,0.0241,-0.0338,0.0524,0.0216,0.8906,0.8906
+Model,Truncation (Trunc - Full),Trunc CD8A Ab vs CD8A Ab,CD8A Ab,Trunc CD8A Ab,39,27,0.1747,0.1165,-0.0582,-0.1046,-0.0235,-0.4853,0.0009,0.0035
+Model,Detection (Ab - GFP),CD8A Ab vs CD8A GFP,CD8A GFP,CD8A Ab,33,39,0.1526,0.1747,0.0221,-0.0332,0.0612,0.1795,0.1937,0.3874
+Model,Detection (Ab - GFP),Trunc CD8A Ab vs Trunc CD8A GFP,Trunc CD8A GFP,Trunc CD8A Ab,28,27,0.1767,0.1165,-0.0602,-0.1,-0.0141,-0.3783,0.0164,0.0493

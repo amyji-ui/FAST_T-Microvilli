@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Validate the model against manual labels per group, and compare microvilli density between groups."""
+"""Validate the model against manual labels per group, and compare microvilli area fraction between groups."""
 
 import argparse
 import glob
@@ -31,7 +31,6 @@ MODEL_COLOR = "#2a78d6"
 INK = "#0b0b0b"
 INK_SECONDARY = "#52514e"
 GRID = "#e4e3df"
-DENSITY_UNIT = 10000
 
 
 def load_settings(config_path: str, run_dir: Optional[str]) -> dict:
@@ -222,19 +221,16 @@ def validation_rows(name: str, group: str, gt: np.ndarray, probs: np.ndarray, pr
     return rows
 
 
-def density_row(name: str, group: str, gt: np.ndarray, pred: np.ndarray, predicted_by: str, settings: dict) -> dict:
-    """Microvilli count, cell footprint (holes filled), density and area fraction for one image, manual and predicted."""
+def fraction_row(name: str, group: str, gt: np.ndarray, pred: np.ndarray, predicted_by: str, settings: dict) -> dict:
+    """Microvilli area, cell footprint (holes filled) and microvilli area fraction for one image, manual and predicted."""
     member_ids = settings["merged_classes"]["microvilli"]
-    min_area = settings["count_min_area"].get("microvilli", 0)
     row = {"image": name, "group": group, "predicted_by": predicted_by}
     for source, mask in (("manual", gt), ("predicted", pred)):
         cell = int(ndi.binary_fill_holes(mask != 0).sum())
-        microvilli = np.isin(mask, member_ids)
-        count = count_objects_bool(microvilli, min_area)
-        row[f"{source}_count"] = count
+        microvilli = int(np.isin(mask, member_ids).sum())
+        row[f"{source}_microvilli_px"] = microvilli
         row[f"{source}_cell_px"] = cell
-        row[f"{source}_density"] = count / cell * DENSITY_UNIT if cell else float("nan")
-        row[f"{source}_area_fraction"] = microvilli.sum() / cell if cell else float("nan")
+        row[f"{source}_fraction"] = microvilli / cell if cell else float("nan")
     return row
 
 
@@ -250,11 +246,11 @@ def holm(p_values: list) -> list:
     return adjusted.tolist()
 
 
-def compare_density(density_df: pd.DataFrame, groups: list) -> pd.DataFrame:
-    """Kruskal-Wallis across groups, then pairwise Mann-Whitney U with Holm correction, for manual and predicted density."""
+def compare_fraction(fraction_df: pd.DataFrame, groups: list) -> pd.DataFrame:
+    """Kruskal-Wallis across groups, then pairwise Mann-Whitney U with Holm correction, for manual and predicted microvilli fraction."""
     rows = []
     for source in ("manual", "predicted"):
-        samples = {g: density_df.loc[density_df["group"] == g, f"{source}_density"].dropna().to_numpy() for g in groups}
+        samples = {g: fraction_df.loc[fraction_df["group"] == g, f"{source}_fraction"].dropna().to_numpy() for g in groups}
         samples = {g: v for g, v in samples.items() if len(v) >= 2}
         if len(samples) >= 3:
             h, p = stats.kruskal(*samples.values())
@@ -325,18 +321,18 @@ def plot_validation(val_df: pd.DataFrame, group: str, metric: str, class_order: 
     plt.close(fig)
 
 
-def plot_density(density_df: pd.DataFrame, comparison: pd.DataFrame, groups: list, source: str, top: float, path: str) -> None:
-    """Microvilli density per group from one source, with Holm-adjusted significance brackets."""
+def plot_fraction(fraction_df: pd.DataFrame, comparison: pd.DataFrame, groups: list, source: str, top: float, path: str) -> None:
+    """Microvilli area fraction per group from one source, with Holm-adjusted significance brackets."""
     title, color = {"manual": ("Manual labels", MANUAL_COLOR), "predicted": ("Model, out-of-fold predictions", MODEL_COLOR)}[source]
     fig, ax = plt.subplots(figsize=(1.5 * len(groups) + 1.5, 5.4))
-    box_with_dots(ax, [density_df.loc[density_df["group"] == g, f"{source}_density"] for g in groups], color, np.random.default_rng(0))
+    box_with_dots(ax, [fraction_df.loc[fraction_df["group"] == g, f"{source}_fraction"] for g in groups], color, np.random.default_rng(0))
     ax.set_xticks(range(len(groups)))
     ax.set_xticklabels([g.replace("_", "\n", 1) for g in groups], fontsize=10)
     style_axis(ax)
     sub = comparison[comparison["source"] == source]
     kw = sub[sub["test"] == "Kruskal-Wallis"]
     kw_text = f"Kruskal-Wallis p = {kw['p_value'].iloc[0]:.2g}" if len(kw) else ""
-    ax.set_title(f"Microvilli density: {title}\n{kw_text}", color=INK, fontsize=11)
+    ax.set_title(f"Microvilli area fraction: {title}\n{kw_text}", color=INK, fontsize=11)
     level = 0
     for _, r in sub[(sub["test"] == "Mann-Whitney U") & (sub["p_holm"] < 0.05)].iterrows():
         a, b = (groups.index(x) for x in r["comparison"].split(" vs "))
@@ -345,7 +341,7 @@ def plot_density(density_df: pd.DataFrame, comparison: pd.DataFrame, groups: lis
         ax.text((a + b) / 2, y, stars(r["p_holm"]), ha="center", va="bottom", color=INK, fontsize=9)
         level += 1
     ax.set_ylim(0, top * (1.14 + 0.08 * max(level, 1)))
-    ax.set_ylabel(f"microvilli per {DENSITY_UNIT:,} px of cell (dot = cell)", color=INK)
+    ax.set_ylabel("microvilli area / cell area (dot = cell)", color=INK)
     fig.text(0.5, 0.005, "Brackets: pairwise Mann-Whitney U, Holm-adjusted (* p<0.05, ** p<0.01, *** p<0.001)",
              ha="center", va="bottom", color=INK_SECONDARY, fontsize=8)
     fig.tight_layout(rect=(0, 0.03, 1, 1))
@@ -353,16 +349,16 @@ def plot_density(density_df: pd.DataFrame, comparison: pd.DataFrame, groups: lis
     plt.close(fig)
 
 
-def plot_overlay(name, image_dir, gt, pred, counts, colormap, path) -> None:
-    """Image, manual mask and predicted mask side by side for one test image, with microvilli counts."""
+def plot_overlay(name, image_dir, gt, pred, fractions, colormap, path) -> None:
+    """Image, manual mask and predicted mask side by side for one test image, with microvilli area fractions."""
     fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.9))
     image = np.array(Image.open(train_TIRF.resolve_image_path(image_dir, name)).convert("L"))
     axes[0].imshow(image, cmap="gray", vmax=np.percentile(image, 99.5))
     axes[0].set_title(name.split("/", 1)[1], fontsize=10)
     axes[1].imshow(colormap[gt])
-    axes[1].set_title(f"Manual: {counts['manual_count']} microvilli", fontsize=10)
+    axes[1].set_title(f"Manual: microvilli fraction {fractions['manual_fraction']:.2f}", fontsize=10)
     axes[2].imshow(colormap[pred])
-    axes[2].set_title(f"Model: {counts['predicted_count']} microvilli", fontsize=10)
+    axes[2].set_title(f"Model: microvilli fraction {fractions['predicted_fraction']:.2f}", fontsize=10)
     for ax in axes:
         ax.axis("off")
     fig.tight_layout()
@@ -385,7 +381,7 @@ def main() -> None:
 
     settings = load_settings(args.config, args.run_dir)
     if "microvilli" not in settings["merged_classes"]:
-        raise SystemExit("config.yaml merged-classes must define 'microvilli' (the structure whose density is compared).")
+        raise SystemExit("config.yaml merged-classes must define 'microvilli' (the structure whose area fraction is compared).")
     run_dir = settings["run_dir"]
     out_dir = args.out_dir or os.path.join(run_dir, "quantification")
     os.makedirs(out_dir, exist_ok=True)
@@ -409,24 +405,26 @@ def main() -> None:
     compare = settings["compare_groups"]
     print(f"Model: {run_dir} ({len(folds)} fold models) on {device}")
 
-    val_rows, density_rows, gts, preds = [], [], {}, {}
+    pred_dir = os.path.join(out_dir, "predicted_masks")
+    shutil.rmtree(pred_dir, ignore_errors=True)
+    val_rows, fraction_rows, gts, preds = [], [], {}, {}
     for name in names:
         group = assign_group(name, settings["groups"])
         is_test = name in test_names
-        if not is_test and group not in compare:
-            continue
         if is_test or name not in val_fold:
             model, predicted_by = ensemble, "ensemble (test)" if is_test else "ensemble (not in split)"
         else:
             model, predicted_by = fold_models[val_fold[name]], f"fold {val_fold[name]} (out-of-fold)"
         probs = predict_probs(model, train_TIRF.resolve_image_path(settings["image_dir"], name), device)
         pred = probs_to_mask(probs, thresholds, fallback)
+        pred_path = os.path.join(pred_dir, name)
+        os.makedirs(os.path.dirname(pred_path), exist_ok=True)
+        Image.fromarray(pred).save(pred_path)
         gt = np.array(Image.open(train_TIRF.resolve_mask_path(settings["mask_dir"], name)).convert("L"))
         if is_test:
             val_rows += validation_rows(name, group, gt, probs.cpu().numpy(), pred, settings)
             gts[name], preds[name] = gt, pred
-        if group in compare:
-            density_rows.append(density_row(name, group, gt, pred, predicted_by, settings))
+        fraction_rows.append(fraction_row(name, group, gt, pred, predicted_by, settings))
 
     class_order = list(seg_classes(settings))
     group_order = [g for g in list(settings["groups"]) + ["Unassigned"]]
@@ -434,9 +432,9 @@ def main() -> None:
     val_df["group"] = pd.Categorical(val_df["group"], categories=group_order, ordered=True)
     val_df["class"] = pd.Categorical(val_df["class"], categories=class_order, ordered=True)
     val_df = val_df.sort_values(["group", "class", "image"])
-    density_df = pd.DataFrame(density_rows)
-    density_df["group"] = pd.Categorical(density_df["group"], categories=compare, ordered=True)
-    density_df = density_df.sort_values(["group", "image"])
+    fraction_df = pd.DataFrame(fraction_rows)
+    fraction_df["group"] = pd.Categorical(fraction_df["group"], categories=group_order, ordered=True)
+    fraction_df = fraction_df.sort_values(["group", "image"])
 
     metrics = ["dice", "cldice", "precision", "recall", "roc_auc", "pr_auc"]
     grouped = val_df.groupby(["group", "class"], observed=True)
@@ -444,21 +442,23 @@ def main() -> None:
     val_summary.columns = [f"{m}_{s}" for m, s in val_summary.columns]
     val_summary.insert(0, "n_images", grouped["image"].nunique())
     val_summary = val_summary.reset_index()
-    comparison = compare_density(density_df, compare)
-    density_summary = density_df.groupby("group", observed=True)[
-        ["manual_density", "predicted_density", "manual_area_fraction", "predicted_area_fraction", "manual_cell_px"]
+    comparison = compare_fraction(fraction_df, compare)
+    fraction_summary = fraction_df.groupby("group", observed=True)[
+        ["manual_fraction", "predicted_fraction", "manual_cell_px", "predicted_cell_px"]
     ].median().round(4)
-    density_summary.insert(0, "n_images", density_df.groupby("group", observed=True)["image"].count())
+    fraction_summary.insert(0, "n_images", fraction_df.groupby("group", observed=True)["image"].count())
 
     for old in glob.glob(os.path.join(out_dir, "fig_*.png")):
         os.remove(old)
-    for folder in ("validation", "density", "overlays"):
+    for old in glob.glob(os.path.join(out_dir, "density_*.csv")):
+        os.remove(old)
+    for folder in ("validation", "density", "fraction", "overlays"):
         shutil.rmtree(os.path.join(out_dir, folder), ignore_errors=True)
     val_df.to_csv(os.path.join(out_dir, "validation_per_image.csv"), index=False)
     val_summary.to_csv(os.path.join(out_dir, "validation_summary.csv"), index=False)
-    density_df.to_csv(os.path.join(out_dir, "density_per_image.csv"), index=False)
-    density_summary.to_csv(os.path.join(out_dir, "density_summary.csv"))
-    comparison.to_csv(os.path.join(out_dir, "density_stats.csv"), index=False)
+    fraction_df.to_csv(os.path.join(out_dir, "fraction_per_image.csv"), index=False)
+    fraction_summary.to_csv(os.path.join(out_dir, "fraction_summary.csv"))
+    comparison.to_csv(os.path.join(out_dir, "fraction_stats.csv"), index=False)
 
     for group in val_df["group"].unique():
         group_dir = os.path.join(out_dir, "validation", str(group))
@@ -466,26 +466,26 @@ def main() -> None:
         for metric in VALIDATION_METRICS:
             plot_validation(val_df, group, metric, class_order, os.path.join(group_dir, f"{metric}.png"))
 
-    os.makedirs(os.path.join(out_dir, "density"), exist_ok=True)
-    top = np.nanmax(density_df[["manual_density", "predicted_density"]].to_numpy())
+    os.makedirs(os.path.join(out_dir, "fraction"), exist_ok=True)
+    top = np.nanmax(fraction_df.loc[fraction_df["group"].isin(compare), ["manual_fraction", "predicted_fraction"]].to_numpy())
     for source, file_name in (("manual", "manual.png"), ("predicted", "model.png")):
-        plot_density(density_df, comparison, compare, source, top, os.path.join(out_dir, "density", file_name))
+        plot_fraction(fraction_df, comparison, compare, source, top, os.path.join(out_dir, "fraction", file_name))
 
-    counts = density_df.set_index("image")
+    fractions = fraction_df.set_index("image")
     for name in test_names:
-        if name not in gts or name not in counts.index:
+        if name not in gts or name not in fractions.index:
             continue
-        group_dir = os.path.join(out_dir, "overlays", str(counts.loc[name, "group"]))
+        group_dir = os.path.join(out_dir, "overlays", str(fractions.loc[name, "group"]))
         os.makedirs(group_dir, exist_ok=True)
-        plot_overlay(name, settings["image_dir"], gts[name], preds[name], counts.loc[name], settings["colormap"],
+        plot_overlay(name, settings["image_dir"], gts[name], preds[name], fractions.loc[name], settings["colormap"],
                      os.path.join(group_dir, os.path.basename(name)))
 
     fmt = lambda v: f"{v:.3f}"
     print("\n=== Validation on held-out test images (mean per image) ===")
     print(val_summary[["group", "class", "n_images"] + [f"{m}_mean" for m in metrics]]
           .rename(columns=lambda c: c.replace("_mean", "")).to_string(index=False, float_format=fmt, na_rep="-"))
-    print(f"\n=== Microvilli density per {DENSITY_UNIT:,} px of cell (median per group) ===")
-    print(density_summary.to_string(float_format=fmt))
+    print("\n=== Microvilli area fraction of cell (median per group) ===")
+    print(fraction_summary.to_string(float_format=fmt))
     print("\n=== Group comparison (Holm-adjusted) ===")
     print(comparison[["source", "comparison", "test", "p_value", "p_holm"]].to_string(index=False, float_format=lambda v: f"{v:.2g}"))
     print(f"\nAll tables and figures saved to {out_dir}")

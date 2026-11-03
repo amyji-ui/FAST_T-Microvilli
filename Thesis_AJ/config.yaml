@@ -71,10 +71,10 @@ groups:
   CD8A_Trunc_ABS: [CD8A_Trunc_ABS]
   CD8AA_old: [CD8AA]        # old batch: training only, not for the group comparison
 
-# Groups whose microvilli density is compared statistically (all groups are still validated).
+# Groups whose microvilli area fraction is compared statistically (all groups are still validated).
 compare-groups: [Control, CD8A_GFP, CD8A_ABS, CD8A_Trunc_GFP, CD8A_Trunc_ABS]
 
-# Minimum microvilli object area (px^2) to be counted for density.
+# Minimum microvilli object area (px^2) for the count features in extract_features.py.
 count-min-area:
   microvilli: 0
 
